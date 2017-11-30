@@ -69,7 +69,6 @@ import net.sf.l2j.gameserver.network.serverpackets.UserInfo;
  * @author Elfocrash
  *
  */
-@SuppressWarnings("static-method")
 public enum FakePlayerManager
 {
 	INSTANCE;
