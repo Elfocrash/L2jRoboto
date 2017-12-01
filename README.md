@@ -7,14 +7,6 @@ It is in a WIP state so it is NOT recommended to use on a live server.
 
 L2jRoboto has minimal dependencies
 
-* Add in GameServer.java
-`FakePlayerManager.INSTANCE.initialise();`
-
-* Register the admin command handler
-`registerAdminCommandHandler(new AdminFakePlayers());`
-
-* Player.java should NOT be final
-
-That should be it
+You can find the patch under the `dist` folder
 
 Have fun
