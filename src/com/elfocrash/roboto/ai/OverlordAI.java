@@ -1,5 +1,6 @@
 package com.elfocrash.roboto.ai;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,17 +15,26 @@ import net.sf.l2j.gameserver.model.ShotType;
  * @author Elfocrash
  *
  */
-public class BishopAI extends FakePlayerAI
+public class OverlordAI extends FakePlayerAI
 {
-	public BishopAI(FakePlayer character)
+	private List<Pair<Integer,Double>> _offensiveSpells;
+	
+	public OverlordAI(FakePlayer character)
 	{
-		super(character);
+		super(character);		
 	}
 	
 	@Override
 	public void thinkAndAct()
 	{
+		if(_fakePlayer.isDead()) {
+			return;
+		}
 		
+		applyDefaultBuffs();
+		handleShots();		
+		tryTargetRandomCreatureByTypeInRadius(FakePlayer.class, 1200);		
+		tryAttackingUsingMageOffensiveSkill();
 	}
 	
 	@Override
@@ -35,20 +45,22 @@ public class BishopAI extends FakePlayerAI
 	
 	@Override
 	protected List<Pair<Integer, Double>> getOffensiveSpells()
-	{		
-		return Collections.emptyList();
-	}
-	
-	@Override
-	protected List<Pair<Integer, Double>> getHealingSpells()
-	{		
-		return Collections.emptyList();
+	{
+		_offensiveSpells = new ArrayList<>();
+		_offensiveSpells.add(new Pair<>(1245, 100d));
+		return _offensiveSpells; 
 	}
 	
 	@Override
 	protected int[][] getBuffs()
 	{
 		return FakePlayerManager.INSTANCE.getMageBuffs();
+	}
+
+	@Override
+	protected List<Pair<Integer, Double>> getHealingSpells()
+	{		
+		return Collections.emptyList();
 	}	
 
 	@Override

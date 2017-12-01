@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import com.elfocrash.roboto.FakePlayer;
 import com.elfocrash.roboto.RandomCollection;
+import com.elfocrash.roboto.model.SupportSpell;
 
 import javafx.util.Pair;
 import net.sf.l2j.commons.random.Rnd;
@@ -23,7 +24,6 @@ import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.instance.Door;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
-import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.serverpackets.ExAutoSoulShot;
 import net.sf.l2j.gameserver.network.serverpackets.MoveToLocation;
@@ -49,20 +49,21 @@ public abstract class FakePlayerAI
 	{
 		_fakePlayer = character;
 		setup();
-		buffPlayer();
+		applyDefaultBuffs();
 	}
 	
 	public abstract void thinkAndAct(); 
 	protected abstract ShotType getShotType();
 	protected abstract List<Pair<Integer,Double>> getOffensiveSpells();
 	protected abstract List<Pair<Integer, Double>> getHealingSpells();
+	protected abstract List<SupportSpell> getSelfSupportSpells();
 	protected abstract int[][] getBuffs();
 	
 	public void setup() {
 		_fakePlayer.setIsRunning(true);
 	}
 	
-	protected void buffPlayer() {
+	protected void applyDefaultBuffs() {
 		for(int[] buff : getBuffs()){
 			try {
 				Map<Integer, L2Effect> activeEffects = Arrays.stream(_fakePlayer.getAllEffects())
@@ -116,20 +117,6 @@ public abstract class FakePlayerAI
 			}
 			
 			_fakePlayer.forceAutoAttack((Creature)_fakePlayer.getTarget());
-		}
-	}
-	
-	protected void handleArrows()
-	{
-		if(_fakePlayer.getInventory().getItemByItemId(getArrowId()) != null) {
-			if(_fakePlayer.getInventory().getItemByItemId(getArrowId()).getCount() <= 20) {
-				_fakePlayer.getInventory().addItem("", getArrowId(), 500, _fakePlayer, null);			
-				
-			}
-		}else {
-			_fakePlayer.getInventory().addItem("", getArrowId(), 500, _fakePlayer, null);
-			ItemInstance arrows = _fakePlayer.getInventory().getItemByItemId(getArrowId());
-			_fakePlayer.getInventory().equipItem(arrows);
 		}
 	}
 	
@@ -193,6 +180,34 @@ public abstract class FakePlayerAI
 		}
 		return skill;
 	}
+	
+	protected void selfSupportBuffs() {
+		List<Integer> activeEffects = Arrays.stream(_fakePlayer.getAllEffects())
+				.filter(x-> x.getSkillType() == L2SkillType.BUFF)
+				.map(x->x.getSkill().getId())
+				.collect(Collectors.toList()); 
+		
+		for(SupportSpell selfBuff : getSelfSupportSpells()) {
+			if(activeEffects.contains(selfBuff.getSkillId()))
+				continue;
+			
+			L2Skill skill = SkillTable.getInstance().getInfo(selfBuff.getSkillId(), _fakePlayer.getSkillLevel(selfBuff.getSkillId()));
+			
+			if(!_fakePlayer.checkUseMagicConditions(skill,true,false))
+				continue;
+			
+			switch(selfBuff.getCondition()) {
+				case LESSHPPERCENT:
+					if((int)Math.round(100.0 / _fakePlayer.getMaxHp() * _fakePlayer.getCurrentHp()) <= selfBuff.getConditionValue()) {
+						castSelfSpell(skill);						
+					}						
+					break;
+				default:
+					break;				
+			}
+			
+		}
+	}
 		
 	protected void castOffensiveSpell(L2Skill skill) {
 		if(!_fakePlayer.isCastingNow()) {		
@@ -230,6 +245,17 @@ public abstract class FakePlayerAI
 				
 				if (_fakePlayer.isSkillDisabled(skill)) {}					
 			}
+			
+			if (skill.getHitTime() > 50 && !skill.isSimultaneousCast())
+				clientStopMoving(null);
+			
+			_fakePlayer.doCast(skill);
+		}
+	}
+	
+	protected void castSelfSpell(L2Skill skill) {
+		if(!_fakePlayer.isCastingNow() && !_fakePlayer.isSkillDisabled(skill)) {		
+			
 			
 			if (skill.getHitTime() > 50 && !skill.isSimultaneousCast())
 				clientStopMoving(null);

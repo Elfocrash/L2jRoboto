@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.elfocrash.roboto.FakePlayer;
 import com.elfocrash.roboto.FakePlayerManager;
+import com.elfocrash.roboto.model.SupportSpell;
 
 import javafx.util.Pair;
 import net.sf.l2j.gameserver.model.ShotType;
@@ -30,7 +31,7 @@ public class SorcererAI extends FakePlayerAI
 			return;
 		}
 		
-		buffPlayer();
+		applyDefaultBuffs();
 		handleShots();
 		
 		tryTargetRandomCreatureByTypeInRadius(FakePlayer.class, 1200);	
@@ -62,6 +63,11 @@ public class SorcererAI extends FakePlayerAI
 	@Override
 	protected List<Pair<Integer, Double>> getHealingSpells()
 	{		
+		return Collections.emptyList();
+	}
+	
+	@Override
+	protected List<SupportSpell> getSelfSupportSpells() {
 		return Collections.emptyList();
 	}
 }

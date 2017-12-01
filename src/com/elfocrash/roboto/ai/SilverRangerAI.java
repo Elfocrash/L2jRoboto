@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.elfocrash.roboto.FakePlayer;
 import com.elfocrash.roboto.FakePlayerManager;
+import com.elfocrash.roboto.ai.addon.IConsumableSpender;
+import com.elfocrash.roboto.model.SupportSpell;
 
 import javafx.util.Pair;
 import net.sf.l2j.gameserver.model.ShotType;
@@ -14,7 +16,7 @@ import net.sf.l2j.gameserver.model.ShotType;
  * @author Elfocrash
  *
  */
-public class SilverRangerAI extends FakePlayerAI
+public class SilverRangerAI extends FakePlayerAI implements IConsumableSpender
 {
 
 	public SilverRangerAI(FakePlayer character)
@@ -29,8 +31,8 @@ public class SilverRangerAI extends FakePlayerAI
 			return;
 		}
 		
-		buffPlayer();
-		handleArrows();		
+		applyDefaultBuffs();
+		handleConsumable(_fakePlayer, getArrowId());
 		handleShots();	
 		
 		tryTargetRandomCreatureByTypeInRadius(FakePlayer.class, 1200);	
@@ -62,6 +64,11 @@ public class SilverRangerAI extends FakePlayerAI
 	@Override
 	protected List<Pair<Integer, Double>> getHealingSpells()
 	{		
+		return Collections.emptyList();
+	}
+	
+	@Override
+	protected List<SupportSpell> getSelfSupportSpells() {
 		return Collections.emptyList();
 	}
 }

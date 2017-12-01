@@ -8,10 +8,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.elfocrash.roboto.ai.AbyssWalkerAI;
+import com.elfocrash.roboto.ai.DestroyerAI;
 import com.elfocrash.roboto.ai.FakePlayerAI;
 import com.elfocrash.roboto.ai.FallbackAI;
 import com.elfocrash.roboto.ai.HawkeyeAI;
 import com.elfocrash.roboto.ai.NecromancerAI;
+import com.elfocrash.roboto.ai.OverlordAI;
 import com.elfocrash.roboto.ai.PhantomRangerAI;
 import com.elfocrash.roboto.ai.PlainsWalkerAI;
 import com.elfocrash.roboto.ai.SilverRangerAI;
@@ -28,13 +30,11 @@ import net.sf.l2j.gameserver.datatables.PlayerNameTable;
 import net.sf.l2j.gameserver.datatables.SkillTable.FrequentSkill;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
-import net.sf.l2j.gameserver.instancemanager.ClanHallManager;
 import net.sf.l2j.gameserver.instancemanager.DimensionalRiftManager;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns.CabalType;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns.SealType;
 import net.sf.l2j.gameserver.model.L2Clan;
-import net.sf.l2j.gameserver.model.L2Clan.SubPledge;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.appearance.PcAppearance;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
@@ -44,26 +44,14 @@ import net.sf.l2j.gameserver.model.base.ClassRace;
 import net.sf.l2j.gameserver.model.base.Experience;
 import net.sf.l2j.gameserver.model.base.Sex;
 import net.sf.l2j.gameserver.model.entity.Castle;
-import net.sf.l2j.gameserver.model.entity.ClanHall;
 import net.sf.l2j.gameserver.model.entity.Siege;
 import net.sf.l2j.gameserver.model.entity.Siege.SiegeSide;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.olympiad.Olympiad;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.Die;
-import net.sf.l2j.gameserver.network.serverpackets.EtcStatusUpdate;
-import net.sf.l2j.gameserver.network.serverpackets.ExStorageMaxCount;
-import net.sf.l2j.gameserver.network.serverpackets.FriendList;
-import net.sf.l2j.gameserver.network.serverpackets.HennaInfo;
-import net.sf.l2j.gameserver.network.serverpackets.ItemList;
-import net.sf.l2j.gameserver.network.serverpackets.PledgeShowMemberListAll;
 import net.sf.l2j.gameserver.network.serverpackets.PledgeShowMemberListUpdate;
-import net.sf.l2j.gameserver.network.serverpackets.PledgeSkillList;
-import net.sf.l2j.gameserver.network.serverpackets.PledgeStatusChanged;
-import net.sf.l2j.gameserver.network.serverpackets.ShortCutInit;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
-import net.sf.l2j.gameserver.network.serverpackets.UserInfo;
 
 /**
  * @author Elfocrash
@@ -88,8 +76,7 @@ public enum FakePlayerManager
 		handlePlayerSevenSignsOnSpawn(activeChar);		
 		if (Config.PLAYER_SPAWN_PROTECTION > 0)
 			activeChar.setSpawnProtection(true);		
-		activeChar.spawnMe(x,y,z);		
-		sendBasicInfoToFake(activeChar);		
+		activeChar.spawnMe(x,y,z);			
 		activeChar.onPlayerEnter();		
 		if (Olympiad.getInstance().playerInStadia(activeChar))
 			activeChar.teleToLocation(TeleportType.TOWN);
@@ -113,24 +100,6 @@ public enum FakePlayerManager
 		{
 			e.printStackTrace();
 		}
-	}
-	
-	private static void sendBasicInfoToFake(FakePlayer activeChar)
-	{
-		activeChar.getMacroses().sendUpdate();
-		activeChar.sendPacket(new UserInfo(activeChar));
-		activeChar.sendPacket(new HennaInfo(activeChar));
-		activeChar.sendPacket(new FriendList(activeChar));
-		activeChar.sendPacket(new ItemList(activeChar, false));
-		activeChar.sendPacket(new ShortCutInit(activeChar));
-		activeChar.sendPacket(new ExStorageMaxCount(activeChar));
-		
-		if (activeChar.isAlikeDead())
-			activeChar.sendPacket(new Die(activeChar));
-		
-		activeChar.updateEffectIcons();
-		activeChar.sendPacket(new EtcStatusUpdate(activeChar));
-		activeChar.sendSkillList();
 	}
 	
 	private static void handlePlayerSevenSignsOnSpawn(FakePlayer activeChar)
@@ -158,9 +127,6 @@ public enum FakePlayerManager
 		final L2Clan clan = activeChar.getClan();
 		if (clan != null)
 		{
-			activeChar.sendPacket(new PledgeSkillList(clan));
-			
-			// Refresh player instance.
 			clan.getClanMember(activeChar.getObjectId()).setPlayerInstance(activeChar);
 			
 			final SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.CLAN_MEMBER_S1_LOGGED_IN).addCharName(activeChar);
@@ -176,24 +142,6 @@ public enum FakePlayerManager
 				member.sendPacket(update);
 			}
 			
-			if (activeChar.getSponsor() != 0)
-			{
-				final Player sponsor = World.getInstance().getPlayer(activeChar.getSponsor());
-				if (sponsor != null)
-					sponsor.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOUR_APPRENTICE_S1_HAS_LOGGED_IN).addCharName(activeChar));
-			}
-			else if (activeChar.getApprentice() != 0)
-			{
-				final Player apprentice = World.getInstance().getPlayer(activeChar.getApprentice());
-				if (apprentice != null)
-					apprentice.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOUR_SPONSOR_S1_HAS_LOGGED_IN).addCharName(activeChar));
-			}
-			
-			// Add message at connexion if clanHall not paid.
-			final ClanHall clanHall = ClanHallManager.getInstance().getClanHallByOwner(clan);
-			if (clanHall != null && !clanHall.getPaid())
-				activeChar.sendPacket(SystemMessageId.PAYMENT_FOR_YOUR_CLAN_HALL_HAS_NOT_BEEN_MADE_PLEASE_MAKE_PAYMENT_TO_YOUR_CLAN_WAREHOUSE_BY_S1_TOMORROW);
-			
 			for (Castle castle : CastleManager.getInstance().getCastles())
 			{
 				final Siege siege = castle.getSiege();
@@ -206,19 +154,10 @@ public enum FakePlayerManager
 				else if (type == SiegeSide.DEFENDER || type == SiegeSide.OWNER)
 					activeChar.setSiegeState((byte) 2);
 			}
-			
-			activeChar.sendPacket(new PledgeShowMemberListAll(clan, 0));
-			
-			for (SubPledge sp : clan.getAllSubPledges())
-				activeChar.sendPacket(new PledgeShowMemberListAll(clan, sp.getId()));
-			
-			activeChar.sendPacket(new UserInfo(activeChar));
-			activeChar.sendPacket(new PledgeStatusChanged(clan));
 		}
 	}
 	
-	public FakePlayer createRandomFakePlayer() {
-		
+	public FakePlayer createRandomFakePlayer() {		
 		int objectId = IdFactory.getInstance().getNextId();
 		//TODO: Add a wordlist
 		String accountName = "AutoPilot";
@@ -233,16 +172,13 @@ public enum FakePlayerManager
 		player.setName(playerName);
 		
 		PlayerNameTable.getInstance().addPlayer(objectId, accountName, playerName, player.getAccessLevel().getLevel());
-		player.setBaseClass(player.getClassId());
-		
-		setLevel(player, 81);
-		
+		player.setBaseClass(player.getClassId());		
+		setLevel(player, 81);		
 		player.giveAvailableSkills();
 		
 		player.setCurrentCp(player.getMaxCp());
 		player.setCurrentHp(player.getMaxHp());
-		player.setCurrentMp(player.getMaxMp());
-		
+		player.setCurrentMp(player.getMaxMp());		
 		giveArmorsByClass(player);
 		giveWeaponsByClass(player);
 		
@@ -387,9 +323,8 @@ public enum FakePlayerManager
 		classes.add(ClassId.EVAS_TEMPLAR);
 		classes.add(ClassId.SWORD_MUSE);
 		
-		classes.add(ClassId.TITAN);
 		classes.add(ClassId.GRAND_KHAVATARI);
-		classes.add(ClassId.DOMINATOR);
+		
 		classes.add(ClassId.DOOMCRYER);
 		classes.add(ClassId.FORTUNE_SEEKER);
 		classes.add(ClassId.MAESTRO);*/
@@ -399,15 +334,17 @@ public enum FakePlayerManager
 		//classes.add(ClassId.SPECTRAL_MASTER);
 		//classes.add(ClassId.SHILLIEN_SAINT);
 		
-		classes.add(ClassId.SAGGITARIUS); // done
-		classes.add(ClassId.ARCHMAGE); // done
-		classes.add(ClassId.SOULTAKER); // done
-		classes.add(ClassId.MYSTIC_MUSE); // done
-		classes.add(ClassId.STORM_SCREAMER); // done
-		classes.add(ClassId.MOONLIGHT_SENTINEL); // done
-		classes.add(ClassId.GHOST_SENTINEL); // done
-		classes.add(ClassId.ADVENTURER); // done
-		classes.add(ClassId.WIND_RIDER); // done
+		classes.add(ClassId.SAGGITARIUS);
+		classes.add(ClassId.ARCHMAGE);
+		classes.add(ClassId.SOULTAKER);
+		classes.add(ClassId.MYSTIC_MUSE);
+		classes.add(ClassId.STORM_SCREAMER);
+		classes.add(ClassId.MOONLIGHT_SENTINEL);
+		classes.add(ClassId.GHOST_SENTINEL);
+		classes.add(ClassId.ADVENTURER);
+		classes.add(ClassId.WIND_RIDER);
+		classes.add(ClassId.DOMINATOR);
+		classes.add(ClassId.TITAN);
 		
 		return classes;
 	}
@@ -455,6 +392,8 @@ public enum FakePlayerManager
 		ais.put(ClassId.ADVENTURER, TreasureHunterAI.class);
 		ais.put(ClassId.WIND_RIDER, PlainsWalkerAI.class);
 		ais.put(ClassId.GHOST_HUNTER, AbyssWalkerAI.class);
+		ais.put(ClassId.DOMINATOR, OverlordAI.class);
+		ais.put(ClassId.TITAN, DestroyerAI.class);
 		
 		return ais;
 	}

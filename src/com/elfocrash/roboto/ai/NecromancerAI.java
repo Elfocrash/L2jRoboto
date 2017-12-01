@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.elfocrash.roboto.FakePlayer;
 import com.elfocrash.roboto.FakePlayerManager;
+import com.elfocrash.roboto.ai.addon.IConsumableSpender;
+import com.elfocrash.roboto.model.SupportSpell;
 
 import javafx.util.Pair;
 import net.sf.l2j.gameserver.model.ShotType;
@@ -14,7 +16,7 @@ import net.sf.l2j.gameserver.model.ShotType;
  * @author Elfocrash
  *
  */
-public class NecromancerAI extends FakePlayerAI
+public class NecromancerAI extends FakePlayerAI implements IConsumableSpender
 {
 	private List<Pair<Integer,Double>> _offensiveSpells;
 	
@@ -30,23 +32,13 @@ public class NecromancerAI extends FakePlayerAI
 			return;
 		}
 		
-		buffPlayer();
-		handleBones();
+		applyDefaultBuffs();
+		handleConsumable(_fakePlayer, 2508);
 		handleShots();		
 		
 		tryTargetRandomCreatureByTypeInRadius(FakePlayer.class, 1200);	
 		
 		tryAttackingUsingMageOffensiveSkill();
-	}
-	
-	private void handleBones() {
-		if(_fakePlayer.getInventory().getItemByItemId(2508) != null) {
-			if(_fakePlayer.getInventory().getItemByItemId(2508).getCount() <= 20) {
-				_fakePlayer.getInventory().addItem("", 2508, 500, _fakePlayer, null);			
-			}
-		}else {
-			_fakePlayer.getInventory().addItem("", 2508, 500, _fakePlayer, null);
-		}
 	}
 	
 	@Override
@@ -74,6 +66,11 @@ public class NecromancerAI extends FakePlayerAI
 	@Override
 	protected List<Pair<Integer, Double>> getHealingSpells()
 	{		
+		return Collections.emptyList();
+	}
+	
+	@Override
+	protected List<SupportSpell> getSelfSupportSpells() {
 		return Collections.emptyList();
 	}
 }
