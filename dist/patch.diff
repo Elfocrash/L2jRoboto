@@ -1,11 +1,3 @@
----
- java/net/sf/l2j/gameserver/GameServer.java             |  4 ++++
- .../sf/l2j/gameserver/handler/AdminCommandHandler.java |  3 +++
- .../l2j/gameserver/handler/chathandlers/ChatTell.java  |  4 +++-
- .../sf/l2j/gameserver/model/actor/instance/Player.java | 18 +++++++++++++++++-
- .../network/clientpackets/MoveBackwardToLocation.java  |  9 +++++++++
- 5 files changed, 36 insertions(+), 2 deletions(-)
-
 diff --git a/java/net/sf/l2j/gameserver/GameServer.java b/java/net/sf/l2j/gameserver/GameServer.java
 index a51ea6f..ced3aed 100644
 --- a/java/net/sf/l2j/gameserver/GameServer.java
@@ -130,3 +122,31 @@ index 046b015..3a5f44a 100644
  				
  		double dx = _targetX - _originX;
  		double dy = _targetY - _originY;
+ 		
+ 		diff --git a/data/html/admin/fakeplayers/index.htm b/data/html/admin/fakeplayers/index.htm
+new file mode 100644
+index 0000000..841e9f6
+--- /dev/null
++++ b/data/html/admin/fakeplayers/index.htm
+@@ -0,0 +1,20 @@
++<html><body>
++<table width=260>
++<tr>
++<td width=40></td>	
++<td width=180><center>Fake Players Dashboard</center></td>
++<td width=40></td>
++</tr>
++<tr>
++<td width=180><center>Fake player count: <font color="LEVEL">%fakecount%</font></center></td>
++</tr>
++<tr>
++<td width=180><center>AI Tasks running: <font color="LEVEL">%taskcount%</font></center></td>
++</tr>
++</table><br>
++<center>
++<table width=230>
++<tr><td><a action="bypass admin_spawnrandom htm"><font color="LEVEL">Spawn fake</font></a></td></tr>
++</table>
++</center>
++</body></html>
+\ No newline at end of file
