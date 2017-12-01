@@ -1,0 +1,132 @@
+---
+ java/net/sf/l2j/gameserver/GameServer.java             |  4 ++++
+ .../sf/l2j/gameserver/handler/AdminCommandHandler.java |  3 +++
+ .../l2j/gameserver/handler/chathandlers/ChatTell.java  |  4 +++-
+ .../sf/l2j/gameserver/model/actor/instance/Player.java | 18 +++++++++++++++++-
+ .../network/clientpackets/MoveBackwardToLocation.java  |  9 +++++++++
+ 5 files changed, 36 insertions(+), 2 deletions(-)
+
+diff --git a/java/net/sf/l2j/gameserver/GameServer.java b/java/net/sf/l2j/gameserver/GameServer.java
+index a51ea6f..ced3aed 100644
+--- a/java/net/sf/l2j/gameserver/GameServer.java
++++ b/java/net/sf/l2j/gameserver/GameServer.java
+@@ -1,5 +1,7 @@
+ package net.sf.l2j.gameserver;
+ 
++import com.elfocrash.roboto.FakePlayerManager;
++
+ import java.io.File;
+ import java.io.FileInputStream;
+ import java.io.IOException;
+@@ -273,6 +275,8 @@ public GameServer() throws Exception
+ 		StringUtil.printSection("Events");
+ 		MonsterRace.getInstance();
+ 		
++		FakePlayerManager.INSTANCE.initialise();
++		
+ 		if (Config.ALLOW_WEDDING)
+ 			CoupleManager.getInstance();
+ 		
+diff --git a/java/net/sf/l2j/gameserver/handler/AdminCommandHandler.java b/java/net/sf/l2j/gameserver/handler/AdminCommandHandler.java
+index 82c7c5c..5cfdac6 100644
+--- a/java/net/sf/l2j/gameserver/handler/AdminCommandHandler.java
++++ b/java/net/sf/l2j/gameserver/handler/AdminCommandHandler.java
+@@ -1,5 +1,7 @@
+ package net.sf.l2j.gameserver.handler;
+ 
++import com.elfocrash.roboto.admincommands.AdminFakePlayers;
++
+ import java.util.HashMap;
+ import java.util.Map;
+ 
+@@ -107,6 +109,7 @@ protected AdminCommandHandler()
+ 		registerAdminCommandHandler(new AdminTarget());
+ 		registerAdminCommandHandler(new AdminTeleport());
+ 		registerAdminCommandHandler(new AdminZone());
++		registerAdminCommandHandler(new AdminFakePlayers());
+ 	}
+ 	
+ 	public void registerAdminCommandHandler(IAdminCommandHandler handler)
+diff --git a/java/net/sf/l2j/gameserver/handler/chathandlers/ChatTell.java b/java/net/sf/l2j/gameserver/handler/chathandlers/ChatTell.java
+index 435a828..cdfc156 100644
+--- a/java/net/sf/l2j/gameserver/handler/chathandlers/ChatTell.java
++++ b/java/net/sf/l2j/gameserver/handler/chathandlers/ChatTell.java
+@@ -1,5 +1,7 @@
+ package net.sf.l2j.gameserver.handler.chathandlers;
+ 
++import com.elfocrash.roboto.FakePlayer;
++
+ import net.sf.l2j.gameserver.handler.IChatHandler;
+ import net.sf.l2j.gameserver.model.BlockList;
+ import net.sf.l2j.gameserver.model.World;
+@@ -21,7 +23,7 @@ public void handleChat(int type, Player activeChar, String target, String text)
+ 			return;
+ 		
+ 		final Player receiver = World.getInstance().getPlayer(target);
+-		if (receiver == null || (receiver.getClient() != null && receiver.getClient().isDetached()))
++		if (receiver == null || (receiver.getClient() != null && receiver.getClient().isDetached() && !(receiver instanceof FakePlayer)))
+ 		{
+ 			activeChar.sendPacket(SystemMessageId.TARGET_IS_NOT_FOUND_IN_THE_GAME);
+ 			return;
+diff --git a/java/net/sf/l2j/gameserver/model/actor/instance/Player.java b/java/net/sf/l2j/gameserver/model/actor/instance/Player.java
+index 87ceb15..1417bbb 100644
+--- a/java/net/sf/l2j/gameserver/model/actor/instance/Player.java
++++ b/java/net/sf/l2j/gameserver/model/actor/instance/Player.java
+@@ -1,5 +1,7 @@
+ package net.sf.l2j.gameserver.model.actor.instance;
+ 
++import com.elfocrash.roboto.FakePlayer;
++
+ import java.sql.Connection;
+ import java.sql.PreparedStatement;
+ import java.sql.ResultSet;
+@@ -248,8 +250,22 @@
+  * This class represents a player in the world.<br>
+  * There is always a client-thread connected to this (except if a player-store is activated upon logout).
+  */
+-public final class Player extends Playable
++public class Player extends Playable
+ {
++	private FakePlayer _fakePlayerUnderControl = null;
++	
++	public boolean isControllingFakePlayer() {
++		return _fakePlayerUnderControl != null;
++	}
++	
++	public FakePlayer getPlayerUnderControl() {
++		return _fakePlayerUnderControl;
++	}
++	
++	public void setPlayerUnderControl(FakePlayer fakePlayer) {
++		_fakePlayerUnderControl = fakePlayer;
++	}
++	
+ 	public enum StoreType
+ 	{
+ 		NONE(0),
+diff --git a/java/net/sf/l2j/gameserver/network/clientpackets/MoveBackwardToLocation.java b/java/net/sf/l2j/gameserver/network/clientpackets/MoveBackwardToLocation.java
+index 046b015..3a5f44a 100644
+--- a/java/net/sf/l2j/gameserver/network/clientpackets/MoveBackwardToLocation.java
++++ b/java/net/sf/l2j/gameserver/network/clientpackets/MoveBackwardToLocation.java
+@@ -1,5 +1,7 @@
+  package net.sf.l2j.gameserver.network.clientpackets;
+ 
++import com.elfocrash.roboto.FakePlayer;
++
+ import java.nio.BufferUnderflowException;
+ 
+ import net.sf.l2j.Config;
+@@ -86,6 +88,13 @@ protected void runImpl()
+ 			activeChar.teleToLocation(_targetX, _targetY, _targetZ, 0);
+ 			return;
+ 		}
++		
++		if(activeChar.isControllingFakePlayer()) {
++			FakePlayer fakePlayer = activeChar.getPlayerUnderControl();
++			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
++			fakePlayer.getAI().setIntention(CtrlIntention.MOVE_TO, new Location(_targetX, _targetY, _targetZ));
++			return;
++		}		
+ 				
+ 		double dx = _targetX - _originX;
+ 		double dy = _targetY - _originY;

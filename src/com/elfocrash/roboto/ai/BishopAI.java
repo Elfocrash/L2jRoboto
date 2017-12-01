@@ -10,7 +10,7 @@ import javafx.util.Pair;
 import net.sf.l2j.gameserver.model.ShotType;
 
 /**
- * @author elfoc
+ * @author Elfocrash
  *
  */
 public class BishopAI extends FakePlayerAI
