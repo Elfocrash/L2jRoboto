@@ -31,8 +31,13 @@ public class TreasureHunterAI extends FakePlayerAI
 		
 		applyDefaultBuffs();
 		handleShots();			
-		tryTargetRandomCreatureByTypeInRadius(FakePlayer.class, 1200);		
+		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), 1200);		
 		tryAttackingUsingFighterOffensiveSkill();
+	}
+	
+	@Override
+	public void run() {
+		thinkAndAct();
 	}
 	
 	@Override

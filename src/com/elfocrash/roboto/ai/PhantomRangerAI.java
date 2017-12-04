@@ -8,6 +8,7 @@ import com.elfocrash.roboto.FakePlayer;
 import com.elfocrash.roboto.FakePlayerManager;
 import com.elfocrash.roboto.ai.addon.IConsumableSpender;
 import com.elfocrash.roboto.model.SupportSpell;
+import com.elfocrash.roboto.model.SupportSpellUsageCondition;
 
 import javafx.util.Pair;
 import net.sf.l2j.gameserver.model.ShotType;
@@ -33,9 +34,10 @@ public class PhantomRangerAI extends FakePlayerAI implements IConsumableSpender
 		
 		applyDefaultBuffs();
 		handleConsumable(_fakePlayer, getArrowId());
+		selfSupportBuffs();
 		handleShots();	
 		
-		tryTargetRandomCreatureByTypeInRadius(FakePlayer.class, 1200);	
+		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());	
 		
 		tryAttackingUsingFighterOffensiveSkill();
 	}
@@ -44,6 +46,11 @@ public class PhantomRangerAI extends FakePlayerAI implements IConsumableSpender
 	protected ShotType getShotType()
 	{
 		return ShotType.SOULSHOT;
+	}
+	
+	@Override
+	public void run() {
+		thinkAndAct();
 	}
 	
 	@Override
@@ -69,6 +76,8 @@ public class PhantomRangerAI extends FakePlayerAI implements IConsumableSpender
 	
 	@Override
 	protected List<SupportSpell> getSelfSupportSpells() {
-		return Collections.emptyList();
+		List<SupportSpell> _selfSupportSpells = new ArrayList<>();
+		_selfSupportSpells.add(new SupportSpell(99, SupportSpellUsageCondition.NONE));
+		return _selfSupportSpells;
 	}
 }

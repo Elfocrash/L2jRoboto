@@ -33,7 +33,7 @@ public class DestroyerAI extends FakePlayerAI
 		applyDefaultBuffs();
 		handleShots();
 		selfSupportBuffs();
-		tryTargetRandomCreatureByTypeInRadius(FakePlayer.class, 1200);		
+		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());		
 		tryAttackingUsingFighterOffensiveSkill();
 	}
 	
@@ -72,5 +72,10 @@ public class DestroyerAI extends FakePlayerAI
 	protected List<Pair<Integer, Double>> getHealingSpells()
 	{		
 		return Collections.emptyList();
+	}
+
+	@Override
+	public void run() {
+		thinkAndAct();
 	}
 }

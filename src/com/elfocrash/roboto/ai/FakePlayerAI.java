@@ -36,7 +36,7 @@ import net.sf.l2j.gameserver.templates.skills.L2SkillType;
  * @author Elfocrash
  *
  */
-public abstract class FakePlayerAI
+public abstract class FakePlayerAI implements Runnable
 {
 	protected final FakePlayer _fakePlayer;
 		
@@ -44,6 +44,7 @@ public abstract class FakePlayerAI
 	protected volatile boolean _clientAutoAttacking;
 	private long _moveToPawnTimeout;
 	protected int _clientMovingToPawnOffset;	
+	private boolean _isPickingMageSpell = false;
 	
 	public FakePlayerAI(FakePlayer character)
 	{
@@ -58,6 +59,10 @@ public abstract class FakePlayerAI
 	protected abstract List<Pair<Integer, Double>> getHealingSpells();
 	protected abstract List<SupportSpell> getSelfSupportSpells();
 	protected abstract int[][] getBuffs();
+	
+	public boolean isPickingMageSpell() {
+		return _isPickingMageSpell;
+	}
 	
 	public void setup() {
 		_fakePlayer.setIsRunning(true);
@@ -151,12 +156,15 @@ public abstract class FakePlayerAI
 		_fakePlayer.getCurrentSkill().setCtrlPressed(!_fakePlayer.getTarget().isInsideZone(ZoneId.PEACE));
 		
 		while(!_fakePlayer.checkUseMagicConditions(skill,true,false)) {
+			_isPickingMageSpell = true;
 			if(_fakePlayer.isDead() || _fakePlayer.isOutOfControl()) {
+				_isPickingMageSpell = false;
 				return null;
 			}
 			randomSkillId =  random.next();
 			skill = SkillTable.getInstance().getInfo(randomSkillId, _fakePlayer.getSkillLevel(randomSkillId));
 		}
+		_isPickingMageSpell = false;
 		return skill;
 	}
 	
@@ -183,7 +191,6 @@ public abstract class FakePlayerAI
 	
 	protected void selfSupportBuffs() {
 		List<Integer> activeEffects = Arrays.stream(_fakePlayer.getAllEffects())
-				.filter(x-> x.getSkillType() == L2SkillType.BUFF)
 				.map(x->x.getSkill().getId())
 				.collect(Collectors.toList()); 
 		
@@ -202,6 +209,8 @@ public abstract class FakePlayerAI
 						castSelfSpell(skill);						
 					}						
 					break;
+				case NONE:
+					castSelfSpell(skill);		
 				default:
 					break;				
 			}

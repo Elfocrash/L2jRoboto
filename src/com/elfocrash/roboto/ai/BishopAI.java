@@ -55,4 +55,9 @@ public class BishopAI extends FakePlayerAI
 	protected List<SupportSpell> getSelfSupportSpells() {
 		return Collections.emptyList();
 	}
+	
+	@Override
+	public void run() {
+		thinkAndAct();
+	}
 }

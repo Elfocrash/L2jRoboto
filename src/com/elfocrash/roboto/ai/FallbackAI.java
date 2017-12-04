@@ -34,6 +34,11 @@ public class FallbackAI extends FakePlayerAI
 	}
 	
 	@Override
+	public void run() {
+		thinkAndAct();
+	}
+	
+	@Override
 	protected List<Pair<Integer, Double>> getOffensiveSpells()
 	{
 		return Collections.emptyList();

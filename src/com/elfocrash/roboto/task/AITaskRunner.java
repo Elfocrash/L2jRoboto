@@ -17,6 +17,6 @@ public class AITaskRunner implements Runnable
 	{		
 		FakePlayerTaskManager.INSTANCE.adjustTaskSize();
 		List<AITask> aiTasks = FakePlayerTaskManager.INSTANCE.getAITasks();		
-		aiTasks.parallelStream().forEach(aiTask -> ThreadPool.schedule(aiTask, 0));
+		aiTasks.forEach(aiTask -> ThreadPool.execute(aiTask));
 	}	
 }

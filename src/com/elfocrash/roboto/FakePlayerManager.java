@@ -37,6 +37,7 @@ import net.sf.l2j.gameserver.instancemanager.SevenSigns.SealType;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.appearance.PcAppearance;
+import net.sf.l2j.gameserver.model.actor.instance.Monster;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.template.PlayerTemplate;
 import net.sf.l2j.gameserver.model.base.ClassId;
@@ -63,6 +64,14 @@ public enum FakePlayerManager
 	
 	private FakePlayerManager() {
 		
+	}
+	
+	public Class<? extends Monster> getTestTargetClass(){
+		return Monster.class;
+	}
+	
+	public int getTestTargetRange() {
+		return 1200;
 	}
 	
 	public void initialise() {

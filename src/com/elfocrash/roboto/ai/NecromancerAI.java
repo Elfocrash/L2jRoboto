@@ -33,12 +33,18 @@ public class NecromancerAI extends FakePlayerAI implements IConsumableSpender
 		}
 		
 		applyDefaultBuffs();
-		handleConsumable(_fakePlayer, 2508);
+		handleConsumable(_fakePlayer, 2508);		
+		
 		handleShots();		
 		
-		tryTargetRandomCreatureByTypeInRadius(FakePlayer.class, 1200);	
+		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());	
 		
 		tryAttackingUsingMageOffensiveSkill();
+	}
+	
+	@Override
+	public void run() {
+		thinkAndAct();
 	}
 	
 	@Override

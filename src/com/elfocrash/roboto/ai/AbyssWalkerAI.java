@@ -31,7 +31,7 @@ public class AbyssWalkerAI extends FakePlayerAI
 		
 		applyDefaultBuffs();
 		handleShots();			
-		tryTargetRandomCreatureByTypeInRadius(FakePlayer.class, 1200);		
+		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());		
 		tryAttackingUsingFighterOffensiveSkill();
 	}
 	
@@ -61,6 +61,11 @@ public class AbyssWalkerAI extends FakePlayerAI
 	protected int[][] getBuffs()
 	{
 		return FakePlayerManager.INSTANCE.getFighterBuffs();
+	}
+	
+	@Override
+	public void run() {
+		thinkAndAct();
 	}
 	
 	@Override

@@ -5,6 +5,8 @@ import java.util.List;
 import com.elfocrash.roboto.FakePlayer;
 import com.elfocrash.roboto.FakePlayerManager;
 
+import net.sf.l2j.commons.concurrent.ThreadPool;
+
 /**
  * @author Elfocrash
  *
@@ -24,7 +26,7 @@ public class AITask implements Runnable
 	{				
 		adjustPotentialIndexOutOfBounds();
 		List<FakePlayer> fakePlayers = FakePlayerManager.INSTANCE.getFakePlayers().subList(_from, _to);		
-		fakePlayers.parallelStream().forEach(x->x.getFakeAi().thinkAndAct());
+		fakePlayers.stream().filter(x-> x.getFakeAi().isPickingMageSpell()).forEach(x-> ThreadPool.execute(x.getFakeAi()));
 	}	
 	
 	private void adjustPotentialIndexOutOfBounds() {

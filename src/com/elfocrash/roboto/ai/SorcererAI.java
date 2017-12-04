@@ -34,7 +34,7 @@ public class SorcererAI extends FakePlayerAI
 		applyDefaultBuffs();
 		handleShots();
 		
-		tryTargetRandomCreatureByTypeInRadius(FakePlayer.class, 1200);	
+		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());	
 		
 		tryAttackingUsingMageOffensiveSkill();
 	}
@@ -43,6 +43,11 @@ public class SorcererAI extends FakePlayerAI
 	protected ShotType getShotType()
 	{
 		return ShotType.BLESSED_SPIRITSHOT;
+	}
+	
+	@Override
+	public void run() {
+		thinkAndAct();
 	}
 	
 	@Override

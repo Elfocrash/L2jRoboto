@@ -34,9 +34,14 @@ public class SpellSignerAI extends FakePlayerAI
 		applyDefaultBuffs();
 		handleShots();
 		
-		tryTargetRandomCreatureByTypeInRadius(FakePlayer.class, 1200);	
+		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());	
 		
 		tryAttackingUsingMageOffensiveSkill();
+	}
+	
+	@Override
+	public void run() {
+		thinkAndAct();
 	}
 	
 	@Override
