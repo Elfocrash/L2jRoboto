@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.elfocrash.roboto.FakePlayer;
 import com.elfocrash.roboto.FakePlayerManager;
+import com.elfocrash.roboto.model.OffensiveSpell;
 import com.elfocrash.roboto.model.SupportSpell;
 
 import javafx.util.Pair;
@@ -34,7 +35,7 @@ public class BishopAI extends FakePlayerAI
 	}
 	
 	@Override
-	protected List<Pair<Integer, Double>> getOffensiveSpells()
+	protected List<OffensiveSpell> getOffensiveSpells()
 	{		
 		return Collections.emptyList();
 	}
@@ -54,10 +55,5 @@ public class BishopAI extends FakePlayerAI
 	@Override
 	protected List<SupportSpell> getSelfSupportSpells() {
 		return Collections.emptyList();
-	}
-	
-	@Override
-	public void run() {
-		thinkAndAct();
 	}
 }

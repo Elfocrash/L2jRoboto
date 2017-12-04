@@ -7,6 +7,8 @@ import java.util.List;
 import com.elfocrash.roboto.FakePlayer;
 import com.elfocrash.roboto.FakePlayerManager;
 import com.elfocrash.roboto.ai.addon.IConsumableSpender;
+import com.elfocrash.roboto.model.OffensiveSpell;
+import com.elfocrash.roboto.model.SpellUsageCondition;
 import com.elfocrash.roboto.model.SupportSpell;
 
 import javafx.util.Pair;
@@ -18,8 +20,6 @@ import net.sf.l2j.gameserver.model.ShotType;
  */
 public class NecromancerAI extends FakePlayerAI implements IConsumableSpender
 {
-	private List<Pair<Integer,Double>> _offensiveSpells;
-	
 	public NecromancerAI(FakePlayer character)
 	{
 		super(character);		
@@ -43,23 +43,18 @@ public class NecromancerAI extends FakePlayerAI implements IConsumableSpender
 	}
 	
 	@Override
-	public void run() {
-		thinkAndAct();
-	}
-	
-	@Override
 	protected ShotType getShotType()
 	{
 		return ShotType.BLESSED_SPIRITSHOT;
 	}
 	
 	@Override
-	protected List<Pair<Integer, Double>> getOffensiveSpells()
+	protected List<OffensiveSpell> getOffensiveSpells()
 	{
-		_offensiveSpells = new ArrayList<>();
-		_offensiveSpells.add(new Pair<>(1234, 33d));
-		_offensiveSpells.add(new Pair<>(1148, 33d));
-		_offensiveSpells.add(new Pair<>(1343, 33d));
+		List<OffensiveSpell> _offensiveSpells = new ArrayList<>();
+		_offensiveSpells.add(new OffensiveSpell(1234, SpellUsageCondition.NONE, 1));
+		_offensiveSpells.add(new OffensiveSpell(1148, SpellUsageCondition.NONE, 2));
+		_offensiveSpells.add(new OffensiveSpell(1343, SpellUsageCondition.NONE, 3));
 		return _offensiveSpells; 
 	}
 	

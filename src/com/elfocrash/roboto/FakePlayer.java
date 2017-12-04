@@ -75,6 +75,9 @@ public class FakePlayer extends Player
 			return false;
 		}
 		
+		if(isSkillDisabled(skill))
+			return false;
+		
 		L2SkillType sklType = skill.getSkillType();
 		
 		if (isFishing() && (sklType != L2SkillType.PUMPING && sklType != L2SkillType.REELING && sklType != L2SkillType.FISHING))

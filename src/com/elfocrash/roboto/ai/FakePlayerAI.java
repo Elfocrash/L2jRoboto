@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.elfocrash.roboto.FakePlayer;
-import com.elfocrash.roboto.RandomCollection;
+import com.elfocrash.roboto.model.OffensiveSpell;
 import com.elfocrash.roboto.model.SupportSpell;
 
 import javafx.util.Pair;
@@ -36,7 +36,7 @@ import net.sf.l2j.gameserver.templates.skills.L2SkillType;
  * @author Elfocrash
  *
  */
-public abstract class FakePlayerAI implements Runnable
+public abstract class FakePlayerAI
 {
 	protected final FakePlayer _fakePlayer;
 		
@@ -55,7 +55,7 @@ public abstract class FakePlayerAI implements Runnable
 	
 	public abstract void thinkAndAct(); 
 	protected abstract ShotType getShotType();
-	protected abstract List<Pair<Integer,Double>> getOffensiveSpells();
+	protected abstract List<OffensiveSpell> getOffensiveSpells();
 	protected abstract List<Pair<Integer, Double>> getHealingSpells();
 	protected abstract List<SupportSpell> getSelfSupportSpells();
 	protected abstract int[][] getBuffs();
@@ -145,12 +145,10 @@ public abstract class FakePlayerAI implements Runnable
 	
 	protected L2Skill getRandomAvaiableMageSpellForTarget() {		
 		
-		RandomCollection<Integer> random = new RandomCollection<>();
-		for(Pair<Integer, Double> pair : getOffensiveSpells()) {
-			random.add(pair.getValue(), pair.getKey());
-		}
-		int randomSkillId =  random.next();
-		L2Skill skill = SkillTable.getInstance().getInfo(randomSkillId, _fakePlayer.getSkillLevel(randomSkillId));
+		List<OffensiveSpell> spellsOrdered = getOffensiveSpells().stream().sorted((o1, o2)-> Integer.compare(o1.getPriority(), o2.getPriority())).collect(Collectors.toList());
+		int skillIndex = 0;
+		int skillListSize = spellsOrdered.size();
+		L2Skill skill = SkillTable.getInstance().getInfo(spellsOrdered.get(skillIndex).getSkillId(), _fakePlayer.getSkillLevel(spellsOrdered.get(skillIndex).getSkillId()));
 		
 		//add Pk logic here
 		_fakePlayer.getCurrentSkill().setCtrlPressed(!_fakePlayer.getTarget().isInsideZone(ZoneId.PEACE));
@@ -161,8 +159,13 @@ public abstract class FakePlayerAI implements Runnable
 				_isPickingMageSpell = false;
 				return null;
 			}
-			randomSkillId =  random.next();
-			skill = SkillTable.getInstance().getInfo(randomSkillId, _fakePlayer.getSkillLevel(randomSkillId));
+			if((skillIndex < 0) || (skillIndex >= skillListSize)) {
+				skillIndex = 0;				
+			}
+
+			skill = SkillTable.getInstance().getInfo(spellsOrdered.get(skillIndex).getSkillId(), _fakePlayer.getSkillLevel(spellsOrdered.get(skillIndex).getSkillId()));
+			skillIndex++;
+			
 		}
 		_isPickingMageSpell = false;
 		return skill;
@@ -171,21 +174,26 @@ public abstract class FakePlayerAI implements Runnable
 	protected L2Skill getRandomAvaiableFighterSpellForTarget() {	
 		int maxRetries = 10;
 		int retries = 0;
-		RandomCollection<Integer> random = new RandomCollection<>();
-		for(Pair<Integer, Double> pair : getOffensiveSpells()) {
-			random.add(pair.getValue(), pair.getKey());
-		}
-		int randomSkillId =  random.next();
-		L2Skill skill = SkillTable.getInstance().getInfo(randomSkillId, _fakePlayer.getSkillLevel(randomSkillId));
+		List<OffensiveSpell> spellsOrdered = getOffensiveSpells().stream().sorted((o1, o2)-> Integer.compare(o1.getPriority(), o2.getPriority())).collect(Collectors.toList());
+		int skillIndex = 0;
+		int skillListSize = spellsOrdered.size();
+		
+		L2Skill skill = _fakePlayer.getSkill(spellsOrdered.get(skillIndex).getSkillId());
 		
 		//add Pk logic here
 		_fakePlayer.getCurrentSkill().setCtrlPressed(!_fakePlayer.getTarget().isInsideZone(ZoneId.PEACE));
 		
+		
+		
 		while(!_fakePlayer.checkUseMagicConditions(skill,true,false) && retries <= maxRetries) {
-			randomSkillId =  random.next();
-			skill = SkillTable.getInstance().getInfo(randomSkillId, _fakePlayer.getSkillLevel(randomSkillId));
+			if((skillIndex < 0) || (skillIndex >= skillListSize)) {
+				skillIndex = 0;				
+			}
+			skill = _fakePlayer.getSkill(spellsOrdered.get(skillIndex).getSkillId());
 			retries++;
+			skillIndex++;
 		}
+
 		return skill;
 	}
 	

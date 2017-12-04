@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.elfocrash.roboto.FakePlayer;
 import com.elfocrash.roboto.FakePlayerManager;
+import com.elfocrash.roboto.model.OffensiveSpell;
+import com.elfocrash.roboto.model.SpellUsageCondition;
 import com.elfocrash.roboto.model.SupportSpell;
 
 import javafx.util.Pair;
@@ -17,8 +19,6 @@ import net.sf.l2j.gameserver.model.ShotType;
  */
 public class OverlordAI extends FakePlayerAI
 {
-	private List<Pair<Integer,Double>> _offensiveSpells;
-	
 	public OverlordAI(FakePlayer character)
 	{
 		super(character);		
@@ -46,15 +46,10 @@ public class OverlordAI extends FakePlayerAI
 	}
 	
 	@Override
-	public void run() {
-		thinkAndAct();
-	}
-	
-	@Override
-	protected List<Pair<Integer, Double>> getOffensiveSpells()
+	protected List<OffensiveSpell> getOffensiveSpells()
 	{
-		_offensiveSpells = new ArrayList<>();
-		_offensiveSpells.add(new Pair<>(1245, 100d));
+		List<OffensiveSpell> _offensiveSpells = new ArrayList<>();
+		_offensiveSpells.add(new OffensiveSpell(1245, SpellUsageCondition.NONE, 1));
 		return _offensiveSpells; 
 	}
 	

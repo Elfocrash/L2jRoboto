@@ -1,6 +1,6 @@
 package com.elfocrash.roboto.model;
 
-public enum SupportSpellUsageCondition {
+public enum SpellUsageCondition {
 	NONE,
 	MOREHPPERCENT,
 	LESSHPPERCENT,

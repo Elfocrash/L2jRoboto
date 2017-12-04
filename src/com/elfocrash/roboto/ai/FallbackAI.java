@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.elfocrash.roboto.FakePlayer;
+import com.elfocrash.roboto.model.OffensiveSpell;
 import com.elfocrash.roboto.model.SupportSpell;
 
 import javafx.util.Pair;
@@ -34,12 +35,7 @@ public class FallbackAI extends FakePlayerAI
 	}
 	
 	@Override
-	public void run() {
-		thinkAndAct();
-	}
-	
-	@Override
-	protected List<Pair<Integer, Double>> getOffensiveSpells()
+	protected List<OffensiveSpell> getOffensiveSpells()
 	{
 		return Collections.emptyList();
 	}

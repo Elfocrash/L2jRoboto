@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.elfocrash.roboto.FakePlayer;
 import com.elfocrash.roboto.FakePlayerManager;
+import com.elfocrash.roboto.model.OffensiveSpell;
+import com.elfocrash.roboto.model.SpellUsageCondition;
 import com.elfocrash.roboto.model.SupportSpell;
 
 import javafx.util.Pair;
@@ -17,8 +19,6 @@ import net.sf.l2j.gameserver.model.ShotType;
  */
 public class SpellSignerAI extends FakePlayerAI
 {
-	private List<Pair<Integer,Double>> _offensiveSpells;
-	
 	public SpellSignerAI(FakePlayer character)
 	{
 		super(character);		
@@ -40,24 +40,19 @@ public class SpellSignerAI extends FakePlayerAI
 	}
 	
 	@Override
-	public void run() {
-		thinkAndAct();
-	}
-	
-	@Override
 	protected ShotType getShotType()
 	{
 		return ShotType.BLESSED_SPIRITSHOT;
 	}
 	
 	@Override
-	protected List<Pair<Integer, Double>> getOffensiveSpells()
+	protected List<OffensiveSpell> getOffensiveSpells()
 	{
-		_offensiveSpells = new ArrayList<>();
-		_offensiveSpells.add(new Pair<>(1235, 25d));
-		_offensiveSpells.add(new Pair<>(1340, 25d));
-		_offensiveSpells.add(new Pair<>(1342, 25d));
-		_offensiveSpells.add(new Pair<>(1265, 25d));
+		List<OffensiveSpell> _offensiveSpells = new ArrayList<>();
+		_offensiveSpells.add(new OffensiveSpell(1235, SpellUsageCondition.NONE, 4));
+		_offensiveSpells.add(new OffensiveSpell(1340, SpellUsageCondition.NONE, 3));
+		_offensiveSpells.add(new OffensiveSpell(1342, SpellUsageCondition.NONE, 2));
+		_offensiveSpells.add(new OffensiveSpell(1265, SpellUsageCondition.NONE, 1));	
 		return _offensiveSpells; 
 	}
 	

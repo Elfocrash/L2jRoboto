@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.elfocrash.roboto.FakePlayer;
 import com.elfocrash.roboto.FakePlayerManager;
+import com.elfocrash.roboto.model.OffensiveSpell;
+import com.elfocrash.roboto.model.SpellUsageCondition;
 import com.elfocrash.roboto.model.SupportSpell;
 
 import javafx.util.Pair;
@@ -42,18 +44,17 @@ public class AbyssWalkerAI extends FakePlayerAI
 	}
 	
 	@Override
-	public List<Pair<Integer, Double>> getOffensiveSpells()
+	public List<OffensiveSpell> getOffensiveSpells()
 	{
-		List<Pair<Integer,Double>> _offensiveSpells = new ArrayList<>();
-		_offensiveSpells.add(new Pair<>(263, 100/8d));
-		_offensiveSpells.add(new Pair<>(122, 100/8d));
-		_offensiveSpells.add(new Pair<>(11, 100/8d));
-		_offensiveSpells.add(new Pair<>(410, 100/8d));			
-		_offensiveSpells.add(new Pair<>(12, 100/8d));		
-		_offensiveSpells.add(new Pair<>(321, 100/8d));
-		_offensiveSpells.add(new Pair<>(344, 100/8d));		
-		_offensiveSpells.add(new Pair<>(358, 100/8d));		
-		
+		List<OffensiveSpell> _offensiveSpells = new ArrayList<>();
+		_offensiveSpells.add(new OffensiveSpell(263, SpellUsageCondition.NONE, 1));
+		_offensiveSpells.add(new OffensiveSpell(122, SpellUsageCondition.NONE, 1));
+		_offensiveSpells.add(new OffensiveSpell(11, SpellUsageCondition.NONE, 1));
+		_offensiveSpells.add(new OffensiveSpell(410, SpellUsageCondition.NONE, 1));
+		_offensiveSpells.add(new OffensiveSpell(12, SpellUsageCondition.NONE, 1));
+		_offensiveSpells.add(new OffensiveSpell(321, SpellUsageCondition.NONE, 1));
+		_offensiveSpells.add(new OffensiveSpell(344, SpellUsageCondition.NONE, 1));
+		_offensiveSpells.add(new OffensiveSpell(358, SpellUsageCondition.NONE, 1));		
 		return _offensiveSpells; 
 	}
 	
@@ -61,11 +62,6 @@ public class AbyssWalkerAI extends FakePlayerAI
 	protected int[][] getBuffs()
 	{
 		return FakePlayerManager.INSTANCE.getFighterBuffs();
-	}
-	
-	@Override
-	public void run() {
-		thinkAndAct();
 	}
 	
 	@Override
