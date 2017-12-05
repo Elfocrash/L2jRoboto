@@ -4,10 +4,10 @@ import java.util.Collections;
 import java.util.List;
 
 import com.elfocrash.roboto.FakePlayer;
+import com.elfocrash.roboto.model.HealingSpell;
 import com.elfocrash.roboto.model.OffensiveSpell;
 import com.elfocrash.roboto.model.SupportSpell;
 
-import javafx.util.Pair;
 import net.sf.l2j.gameserver.model.ShotType;
 
 /**
@@ -47,7 +47,7 @@ public class FallbackAI extends FakePlayerAI
 	}
 	
 	@Override
-	protected List<Pair<Integer, Double>> getHealingSpells()
+	protected List<HealingSpell> getHealingSpells()
 	{		
 		return Collections.emptyList();
 	}	

@@ -5,8 +5,6 @@ import java.util.List;
 import com.elfocrash.roboto.FakePlayer;
 import com.elfocrash.roboto.FakePlayerManager;
 
-import net.sf.l2j.commons.concurrent.ThreadPool;
-
 /**
  * @author Elfocrash
  *

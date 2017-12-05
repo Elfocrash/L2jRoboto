@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.elfocrash.roboto.ai.AbyssWalkerAI;
+import com.elfocrash.roboto.ai.BishopAI;
 import com.elfocrash.roboto.ai.DestroyerAI;
 import com.elfocrash.roboto.ai.FakePlayerAI;
 import com.elfocrash.roboto.ai.FallbackAI;
@@ -327,7 +328,7 @@ public enum FakePlayerManager
 		classes.add(ClassId.PHOENIX_KNIGHT);
 		classes.add(ClassId.HELL_KNIGHT);
 		
-		classes.add(ClassId.CARDINAL);
+		
 		classes.add(ClassId.HIEROPHANT);
 		classes.add(ClassId.EVAS_TEMPLAR);
 		classes.add(ClassId.SWORD_MUSE);
@@ -354,6 +355,7 @@ public enum FakePlayerManager
 		classes.add(ClassId.WIND_RIDER);
 		classes.add(ClassId.DOMINATOR);
 		classes.add(ClassId.TITAN);
+		classes.add(ClassId.CARDINAL);
 		
 		return classes;
 	}
@@ -403,6 +405,7 @@ public enum FakePlayerManager
 		ais.put(ClassId.GHOST_HUNTER, AbyssWalkerAI.class);
 		ais.put(ClassId.DOMINATOR, OverlordAI.class);
 		ais.put(ClassId.TITAN, DestroyerAI.class);
+		ais.put(ClassId.CARDINAL, BishopAI.class);
 		
 		return ais;
 	}

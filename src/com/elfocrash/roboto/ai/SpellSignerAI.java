@@ -6,11 +6,10 @@ import java.util.List;
 
 import com.elfocrash.roboto.FakePlayer;
 import com.elfocrash.roboto.FakePlayerManager;
+import com.elfocrash.roboto.model.HealingSpell;
 import com.elfocrash.roboto.model.OffensiveSpell;
-import com.elfocrash.roboto.model.SpellUsageCondition;
 import com.elfocrash.roboto.model.SupportSpell;
 
-import javafx.util.Pair;
 import net.sf.l2j.gameserver.model.ShotType;
 
 /**
@@ -49,10 +48,10 @@ public class SpellSignerAI extends FakePlayerAI
 	protected List<OffensiveSpell> getOffensiveSpells()
 	{
 		List<OffensiveSpell> _offensiveSpells = new ArrayList<>();
-		_offensiveSpells.add(new OffensiveSpell(1235, SpellUsageCondition.NONE, 4));
-		_offensiveSpells.add(new OffensiveSpell(1340, SpellUsageCondition.NONE, 3));
-		_offensiveSpells.add(new OffensiveSpell(1342, SpellUsageCondition.NONE, 2));
-		_offensiveSpells.add(new OffensiveSpell(1265, SpellUsageCondition.NONE, 1));	
+		_offensiveSpells.add(new OffensiveSpell(1235, 4));
+		_offensiveSpells.add(new OffensiveSpell(1340, 3));
+		_offensiveSpells.add(new OffensiveSpell(1342, 2));
+		_offensiveSpells.add(new OffensiveSpell(1265, 1));	
 		return _offensiveSpells; 
 	}
 	
@@ -63,7 +62,7 @@ public class SpellSignerAI extends FakePlayerAI
 	}
 
 	@Override
-	protected List<Pair<Integer, Double>> getHealingSpells()
+	protected List<HealingSpell> getHealingSpells()
 	{		
 		return Collections.emptyList();
 	}

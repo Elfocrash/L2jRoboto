@@ -7,11 +7,10 @@ import java.util.List;
 import com.elfocrash.roboto.FakePlayer;
 import com.elfocrash.roboto.FakePlayerManager;
 import com.elfocrash.roboto.ai.addon.IConsumableSpender;
-import com.elfocrash.roboto.model.SupportSpell;
+import com.elfocrash.roboto.model.HealingSpell;
 import com.elfocrash.roboto.model.OffensiveSpell;
-import com.elfocrash.roboto.model.SpellUsageCondition;
+import com.elfocrash.roboto.model.SupportSpell;
 
-import javafx.util.Pair;
 import net.sf.l2j.gameserver.model.ShotType;
 
 /**
@@ -53,8 +52,8 @@ public class SilverRangerAI extends FakePlayerAI implements IConsumableSpender
 	protected List<OffensiveSpell> getOffensiveSpells()
 	{
 		List<OffensiveSpell> _offensiveSpells = new ArrayList<>();
-		_offensiveSpells.add(new OffensiveSpell(101, SpellUsageCondition.NONE, 1));
-		_offensiveSpells.add(new OffensiveSpell(343, SpellUsageCondition.NONE, 1));
+		_offensiveSpells.add(new OffensiveSpell(101, 1));
+		_offensiveSpells.add(new OffensiveSpell(343, 1));
 		return _offensiveSpells;
 	}
 	
@@ -65,7 +64,7 @@ public class SilverRangerAI extends FakePlayerAI implements IConsumableSpender
 	}
 	
 	@Override
-	protected List<Pair<Integer, Double>> getHealingSpells()
+	protected List<HealingSpell> getHealingSpells()
 	{		
 		return Collections.emptyList();
 	}
@@ -73,7 +72,7 @@ public class SilverRangerAI extends FakePlayerAI implements IConsumableSpender
 	@Override
 	protected List<SupportSpell> getSelfSupportSpells() {
 		List<SupportSpell> _selfSupportSpells = new ArrayList<>();
-		_selfSupportSpells.add(new SupportSpell(99, SpellUsageCondition.NONE));
+		_selfSupportSpells.add(new SupportSpell(99, 1));
 		return _selfSupportSpells;
 	}
 }

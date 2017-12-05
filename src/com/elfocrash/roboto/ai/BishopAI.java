@@ -1,21 +1,24 @@
 package com.elfocrash.roboto.ai;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import com.elfocrash.roboto.FakePlayer;
 import com.elfocrash.roboto.FakePlayerManager;
+import com.elfocrash.roboto.ai.addon.IHealer;
+import com.elfocrash.roboto.model.HealingSpell;
 import com.elfocrash.roboto.model.OffensiveSpell;
 import com.elfocrash.roboto.model.SupportSpell;
 
-import javafx.util.Pair;
+import net.sf.l2j.gameserver.model.L2Skill.SkillTargetType;
 import net.sf.l2j.gameserver.model.ShotType;
 
 /**
  * @author Elfocrash
  *
  */
-public class BishopAI extends FakePlayerAI
+public class BishopAI extends FakePlayerAI implements IHealer
 {
 	public BishopAI(FakePlayer character)
 	{
@@ -25,7 +28,14 @@ public class BishopAI extends FakePlayerAI
 	@Override
 	public void thinkAndAct()
 	{
+		if(_fakePlayer.isDead()) {
+			return;
+		}
 		
+		applyDefaultBuffs();
+		handleShots();		
+		tryTargetingLowestHpTargetInRadius(_fakePlayer, FakePlayer.class, FakePlayerManager.INSTANCE.getTestTargetRange());
+		tryHealingTarget(_fakePlayer);
 	}
 	
 	@Override
@@ -41,9 +51,12 @@ public class BishopAI extends FakePlayerAI
 	}
 	
 	@Override
-	protected List<Pair<Integer, Double>> getHealingSpells()
+	protected List<HealingSpell> getHealingSpells()
 	{		
-		return Collections.emptyList();
+		List<HealingSpell> _healingSpells = new ArrayList<>();
+		_healingSpells.add(new HealingSpell(1218, SkillTargetType.TARGET_ONE, 70, 1));		
+		_healingSpells.add(new HealingSpell(1217, SkillTargetType.TARGET_ONE, 80, 3));
+		return _healingSpells; 
 	}
 	
 	@Override

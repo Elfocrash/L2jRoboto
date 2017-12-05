@@ -6,11 +6,10 @@ import java.util.List;
 
 import com.elfocrash.roboto.FakePlayer;
 import com.elfocrash.roboto.FakePlayerManager;
+import com.elfocrash.roboto.model.HealingSpell;
 import com.elfocrash.roboto.model.OffensiveSpell;
-import com.elfocrash.roboto.model.SpellUsageCondition;
 import com.elfocrash.roboto.model.SupportSpell;
 
-import javafx.util.Pair;
 import net.sf.l2j.gameserver.model.ShotType;
 
 /**
@@ -47,13 +46,13 @@ public class PlainsWalkerAI extends FakePlayerAI
 	protected List<OffensiveSpell> getOffensiveSpells()
 	{
 		List<OffensiveSpell> _offensiveSpells = new ArrayList<>();
-		_offensiveSpells.add(new OffensiveSpell(263, SpellUsageCondition.NONE, 1));
-		_offensiveSpells.add(new OffensiveSpell(12, SpellUsageCondition.NONE, 2));
-		_offensiveSpells.add(new OffensiveSpell(410, SpellUsageCondition.NONE, 3));
-		_offensiveSpells.add(new OffensiveSpell(102, SpellUsageCondition.NONE, 4));
-		_offensiveSpells.add(new OffensiveSpell(321, SpellUsageCondition.NONE, 5));
-		_offensiveSpells.add(new OffensiveSpell(344, SpellUsageCondition.NONE, 6));
-		_offensiveSpells.add(new OffensiveSpell(358, SpellUsageCondition.NONE, 7));	
+		_offensiveSpells.add(new OffensiveSpell(263, 1));
+		_offensiveSpells.add(new OffensiveSpell(12, 2));
+		_offensiveSpells.add(new OffensiveSpell(410, 3));
+		_offensiveSpells.add(new OffensiveSpell(102, 4));
+		_offensiveSpells.add(new OffensiveSpell(321, 5));
+		_offensiveSpells.add(new OffensiveSpell(344, 6));
+		_offensiveSpells.add(new OffensiveSpell(358, 7));	
 		return _offensiveSpells; 
 	}
 	
@@ -64,7 +63,7 @@ public class PlainsWalkerAI extends FakePlayerAI
 	}	
 	
 	@Override
-	protected List<Pair<Integer, Double>> getHealingSpells()
+	protected List<HealingSpell> getHealingSpells()
 	{		
 		return Collections.emptyList();
 	}
