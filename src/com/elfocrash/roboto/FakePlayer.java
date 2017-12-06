@@ -1,16 +1,23 @@
 package com.elfocrash.roboto;
 
+import java.util.logging.Level;
+
 import com.elfocrash.roboto.ai.FakePlayerAI;
 
+import net.sf.l2j.gameserver.datatables.GmListTable;
+import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
+import net.sf.l2j.gameserver.instancemanager.CursedWeaponsManager;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns.CabalType;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns.SealType;
+import net.sf.l2j.gameserver.model.L2ClanMember;
 import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.L2Skill.SkillTargetType;
 import net.sf.l2j.gameserver.model.Location;
+import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Attackable;
 import net.sf.l2j.gameserver.model.actor.Creature;
@@ -20,12 +27,16 @@ import net.sf.l2j.gameserver.model.actor.appearance.PcAppearance;
 import net.sf.l2j.gameserver.model.actor.instance.Door;
 import net.sf.l2j.gameserver.model.actor.instance.Monster;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
+import net.sf.l2j.gameserver.model.actor.instance.StaticObject;
 import net.sf.l2j.gameserver.model.actor.template.PlayerTemplate;
 import net.sf.l2j.gameserver.model.entity.Siege;
 import net.sf.l2j.gameserver.model.entity.Siege.SiegeSide;
+import net.sf.l2j.gameserver.model.group.Party.MessageType;
+import net.sf.l2j.gameserver.model.olympiad.OlympiadManager;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
+import net.sf.l2j.gameserver.network.serverpackets.PledgeShowMemberListUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 import net.sf.l2j.gameserver.skills.l2skills.L2SkillSiegeFlag;
 import net.sf.l2j.gameserver.templates.skills.L2SkillType;
@@ -507,5 +518,126 @@ public class FakePlayer extends Player
 		
 		// Notify AI with ATTACK
 		getAI().setIntention(CtrlIntention.ATTACK, this.getTarget());
+	}
+	
+	public synchronized void despawnPlayer()
+	{
+		try
+		{
+			// Put the online status to false
+			setOnlineStatus(false, true);
+			
+			// abort cast & attack and remove the target. Cancels movement aswell.
+			abortAttack();
+			abortCast();
+			stopMove(null);
+			setTarget(null);
+			
+			removeMeFromPartyMatch();
+			
+			if (isFlying())
+				removeSkill(SkillTable.getInstance().getInfo(4289, 1));
+			
+			// Stop all scheduled tasks
+			stopAllTimers();
+			
+			// Cancel the cast of eventual fusion skill users on this target.
+			for (Creature character : getKnownType(Creature.class))
+				if (character.getFusionSkill() != null && character.getFusionSkill().getTarget() == this)
+					character.abortCast();
+				
+			// Stop signets & toggles effects.
+			for (L2Effect effect : getAllEffects())
+			{
+				if (effect.getSkill().isToggle())
+				{
+					effect.exit();
+					continue;
+				}
+				
+				switch (effect.getEffectType())
+				{
+					case SIGNET_GROUND:
+					case SIGNET_EFFECT:
+						effect.exit();
+						break;
+				default:
+					break;
+				}
+			}
+			
+			// Remove the Player from the world
+			decayMe();
+			
+			// If a party is in progress, leave it
+			if (getParty() != null)
+				getParty().removePartyMember(this, MessageType.DISCONNECTED);
+			
+			// If the Player has Pet, unsummon it
+			if (getPet() != null)
+				getPet().unSummon(this);
+			
+			// Handle removal from olympiad game
+			if (OlympiadManager.getInstance().isRegistered(this) || getOlympiadGameId() != -1)
+				OlympiadManager.getInstance().removeDisconnectedCompetitor(this);
+			
+			// set the status for pledge member list to OFFLINE
+			if (getClan() != null)
+			{
+				L2ClanMember clanMember = getClan().getClanMember(getObjectId());
+				if (clanMember != null)
+					clanMember.setPlayerInstance(null);
+			}
+			
+			// deals with sudden exit in the middle of transaction
+			if (getActiveRequester() != null)
+			{
+				setActiveRequester(null);
+				cancelActiveTrade();
+			}
+			
+			// If the Player is a GM, remove it from the GM List
+			if (isGM())
+				GmListTable.getInstance().deleteGm(this);
+			
+			// Check if the Player is in observer mode to set its position to its position before entering in observer mode
+			if (isInObserverMode())
+				setXYZInvisible(getSavedLocation());
+			
+			// Oust player from boat
+			if (getVehicle() != null)
+				getVehicle().oustPlayer(this, true, Location.DUMMY_LOC);
+			
+			// Update inventory and remove them from the world
+			getInventory().deleteMe();
+			
+			// Update warehouse and remove them from the world
+			clearWarehouse();
+			
+			// Update freight and remove them from the world
+			clearFreight();
+			clearDepositedFreight();
+			
+			if (isCursedWeaponEquipped())
+				CursedWeaponsManager.getInstance().getCursedWeapon(getCursedWeaponEquippedId()).setPlayer(null);
+			
+			if (getClanId() > 0)
+				getClan().broadcastToOtherOnlineMembers(new PledgeShowMemberListUpdate(this), this);
+			
+			if (isSeated())
+			{
+				final WorldObject object = World.getInstance().getObject(_throneId);
+				if (object instanceof StaticObject)
+					((StaticObject) object).setBusy(false);
+			}
+			
+			World.getInstance().removePlayer(this); // force remove in case of crash during teleport
+			
+			getBlockList().playerLogout();
+		}
+		catch (Exception e)
+		{
+			_log.log(Level.WARNING, "Exception on despawnPlayer()" + e.getMessage(), e);
+		}
 	}
 }

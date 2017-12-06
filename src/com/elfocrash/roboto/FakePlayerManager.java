@@ -100,6 +100,14 @@ public enum FakePlayerManager
 		assignDefaultAIToPlayer(activeChar);		
 	}
 	
+	public void despawnFakePlayer(int objectId) {
+		Player player = World.getInstance().getPlayer(objectId);
+		if(player instanceof FakePlayer) {
+			FakePlayer fakePlayer = (FakePlayer)player;
+			fakePlayer.despawnPlayer();
+		}
+	}
+	
 	private void assignDefaultAIToPlayer(FakePlayer activeChar)
 	{
 		try

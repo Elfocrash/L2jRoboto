@@ -20,7 +20,8 @@ public class AdminFakePlayers implements IAdminCommandHandler
 		"admin_takecontrol",
 		"admin_releasecontrol",
 		"admin_fakes",
-		"admin_spawnrandom"
+		"admin_spawnrandom",
+		"admin_deletefake"
 	};
 	
 	@Override
@@ -43,6 +44,13 @@ public class AdminFakePlayers implements IAdminCommandHandler
 		if (command.startsWith("admin_fakes"))
 		{
 			showFakeDashboard(activeChar);
+		}
+		
+		if(command.startsWith("admin_deletefake")) {
+			if(activeChar.getTarget() != null && activeChar.getTarget() instanceof FakePlayer) {
+				FakePlayer fakePlayer = (FakePlayer)activeChar.getTarget();
+				fakePlayer.despawnPlayer();
+			}
 		}
 		
 		if (command.startsWith("admin_spawnrandom")) {
