@@ -17,60 +17,60 @@ import net.sf.l2j.gameserver.model.ShotType;
  * @author Elfocrash
  *
  */
-public class HawkeyeAI extends CombatAI implements IConsumableSpender
+public class SoultakerAI extends CombatAI implements IConsumableSpender
 {
-
-	public HawkeyeAI(FakePlayer character)
+	public SoultakerAI(FakePlayer character)
 	{
-		super(character);
+		super(character);		
 	}
 	
 	@Override
 	public void thinkAndAct()
-	{		
+	{
 		if(_fakePlayer.isDead()) {
 			return;
 		}
 		
 		applyDefaultBuffs();
-		selfSupportBuffs();
-		handleConsumable(_fakePlayer, getArrowId());
+		handleConsumable(_fakePlayer, 2508);		
+		
 		handleShots();		
-		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());
-		tryAttackingUsingFighterOffensiveSkill();
+		
+		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());	
+		
+		tryAttackingUsingMageOffensiveSkill();
 	}
 	
 	@Override
 	protected ShotType getShotType()
 	{
-		return ShotType.SOULSHOT;
+		return ShotType.BLESSED_SPIRITSHOT;
 	}
 	
 	@Override
 	protected List<OffensiveSpell> getOffensiveSpells()
 	{
 		List<OffensiveSpell> _offensiveSpells = new ArrayList<>();
-		_offensiveSpells.add(new OffensiveSpell(101, 1));
-		_offensiveSpells.add(new OffensiveSpell(343, 1));
-		return _offensiveSpells;
+		_offensiveSpells.add(new OffensiveSpell(1234, 1));
+		_offensiveSpells.add(new OffensiveSpell(1148, 2));
+		_offensiveSpells.add(new OffensiveSpell(1343, 3));
+		return _offensiveSpells; 
 	}
 	
 	@Override
 	protected int[][] getBuffs()
 	{
-		return FakePlayerManager.INSTANCE.getFighterBuffs();
+		return FakePlayerManager.INSTANCE.getMageBuffs();
 	}
-	
+
 	@Override
 	protected List<HealingSpell> getHealingSpells()
 	{		
 		return Collections.emptyList();
 	}
-
+	
 	@Override
 	protected List<SupportSpell> getSelfSupportSpells() {
-		List<SupportSpell> _selfSupportSpells = new ArrayList<>();
-		_selfSupportSpells.add(new SupportSpell(99, 1));
-		return _selfSupportSpells;
+		return Collections.emptyList();
 	}
 }

@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.elfocrash.roboto.FakePlayer;
 import com.elfocrash.roboto.FakePlayerManager;
+import com.elfocrash.roboto.ai.addon.IConsumableSpender;
 import com.elfocrash.roboto.model.HealingSpell;
 import com.elfocrash.roboto.model.OffensiveSpell;
 import com.elfocrash.roboto.model.SupportSpell;
@@ -16,23 +17,26 @@ import net.sf.l2j.gameserver.model.ShotType;
  * @author Elfocrash
  *
  */
-public class AbyssWalkerAI extends CombatAI
+public class SaggitariusAI extends CombatAI implements IConsumableSpender
 {
-	public AbyssWalkerAI(FakePlayer character)
+
+	public SaggitariusAI(FakePlayer character)
 	{
 		super(character);
 	}
 	
 	@Override
 	public void thinkAndAct()
-	{
+	{		
 		if(_fakePlayer.isDead()) {
 			return;
 		}
 		
 		applyDefaultBuffs();
-		handleShots();			
-		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());		
+		selfSupportBuffs();
+		handleConsumable(_fakePlayer, getArrowId());
+		handleShots();		
+		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());
 		tryAttackingUsingFighterOffensiveSkill();
 	}
 	
@@ -43,18 +47,12 @@ public class AbyssWalkerAI extends CombatAI
 	}
 	
 	@Override
-	public List<OffensiveSpell> getOffensiveSpells()
+	protected List<OffensiveSpell> getOffensiveSpells()
 	{
 		List<OffensiveSpell> _offensiveSpells = new ArrayList<>();
-		_offensiveSpells.add(new OffensiveSpell(263, 1));
-		_offensiveSpells.add(new OffensiveSpell(122, 1));
-		_offensiveSpells.add(new OffensiveSpell(11, 1));
-		_offensiveSpells.add(new OffensiveSpell(410, 1));
-		_offensiveSpells.add(new OffensiveSpell(12, 1));
-		_offensiveSpells.add(new OffensiveSpell(321, 1));
-		_offensiveSpells.add(new OffensiveSpell(344, 1));
-		_offensiveSpells.add(new OffensiveSpell(358, 1));		
-		return _offensiveSpells; 
+		_offensiveSpells.add(new OffensiveSpell(101, 1));
+		_offensiveSpells.add(new OffensiveSpell(343, 1));
+		return _offensiveSpells;
 	}
 	
 	@Override
@@ -71,6 +69,8 @@ public class AbyssWalkerAI extends CombatAI
 
 	@Override
 	protected List<SupportSpell> getSelfSupportSpells() {
-		return Collections.emptyList();
+		List<SupportSpell> _selfSupportSpells = new ArrayList<>();
+		_selfSupportSpells.add(new SupportSpell(99, 1));
+		return _selfSupportSpells;
 	}
 }

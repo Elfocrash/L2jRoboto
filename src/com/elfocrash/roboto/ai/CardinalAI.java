@@ -18,9 +18,9 @@ import net.sf.l2j.gameserver.model.ShotType;
  * @author Elfocrash
  *
  */
-public class BishopAI extends CombatAI implements IHealer
+public class CardinalAI extends CombatAI implements IHealer
 {
-	public BishopAI(FakePlayer character)
+	public CardinalAI(FakePlayer character)
 	{
 		super(character);
 	}

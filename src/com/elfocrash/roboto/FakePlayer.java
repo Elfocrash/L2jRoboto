@@ -80,6 +80,9 @@ public class FakePlayer extends Player
 	
 	public boolean checkUseMagicConditions(L2Skill skill, boolean forceUse, boolean dontMove)
 	{
+		if(skill == null)
+			return false;
+		
 		if (isDead() || isOutOfControl())
 		{
 			sendPacket(ActionFailed.STATIC_PACKET);

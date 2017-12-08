@@ -7,21 +7,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.elfocrash.roboto.ai.AbyssWalkerAI;
-import com.elfocrash.roboto.ai.BishopAI;
-import com.elfocrash.roboto.ai.DestroyerAI;
+import com.elfocrash.roboto.ai.GhostHunterAI;
+import com.elfocrash.roboto.ai.CardinalAI;
+import com.elfocrash.roboto.ai.TitanAI;
 import com.elfocrash.roboto.ai.FakePlayerAI;
 import com.elfocrash.roboto.ai.FallbackAI;
-import com.elfocrash.roboto.ai.HawkeyeAI;
-import com.elfocrash.roboto.ai.NecromancerAI;
-import com.elfocrash.roboto.ai.OverlordAI;
-import com.elfocrash.roboto.ai.PhantomRangerAI;
-import com.elfocrash.roboto.ai.PlainsWalkerAI;
-import com.elfocrash.roboto.ai.SilverRangerAI;
-import com.elfocrash.roboto.ai.SorcererAI;
-import com.elfocrash.roboto.ai.SpellHowlerAI;
-import com.elfocrash.roboto.ai.SpellSignerAI;
-import com.elfocrash.roboto.ai.TreasureHunterAI;
+import com.elfocrash.roboto.ai.SaggitariusAI;
+import com.elfocrash.roboto.ai.SoultakerAI;
+import com.elfocrash.roboto.ai.DominatorAI;
+import com.elfocrash.roboto.ai.GhostSentinelAI;
+import com.elfocrash.roboto.ai.WindRiderAI;
+import com.elfocrash.roboto.ai.MoonlightSentinelAI;
+import com.elfocrash.roboto.ai.ArchmageAI;
+import com.elfocrash.roboto.ai.StormScreamerAI;
+import com.elfocrash.roboto.ai.MysticMuse;
+import com.elfocrash.roboto.ai.AdventurerAI;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.commons.random.Rnd;
@@ -401,19 +401,19 @@ public enum FakePlayerManager
 	
 	public Map<ClassId, Class<? extends FakePlayerAI>> getAllAIs() {
 		Map<ClassId, Class<? extends FakePlayerAI>> ais = new HashMap<>();
-		ais.put(ClassId.STORM_SCREAMER, SpellHowlerAI.class);
-		ais.put(ClassId.MYSTIC_MUSE, SpellSignerAI.class);
-		ais.put(ClassId.ARCHMAGE, SorcererAI.class);
-		ais.put(ClassId.SOULTAKER, NecromancerAI.class);
-		ais.put(ClassId.SAGGITARIUS, HawkeyeAI.class);
-		ais.put(ClassId.MOONLIGHT_SENTINEL, SilverRangerAI.class);		
-		ais.put(ClassId.GHOST_SENTINEL, PhantomRangerAI.class);		
-		ais.put(ClassId.ADVENTURER, TreasureHunterAI.class);
-		ais.put(ClassId.WIND_RIDER, PlainsWalkerAI.class);
-		ais.put(ClassId.GHOST_HUNTER, AbyssWalkerAI.class);
-		ais.put(ClassId.DOMINATOR, OverlordAI.class);
-		ais.put(ClassId.TITAN, DestroyerAI.class);
-		ais.put(ClassId.CARDINAL, BishopAI.class);
+		ais.put(ClassId.STORM_SCREAMER, StormScreamerAI.class);
+		ais.put(ClassId.MYSTIC_MUSE, MysticMuse.class);
+		ais.put(ClassId.ARCHMAGE, ArchmageAI.class);
+		ais.put(ClassId.SOULTAKER, SoultakerAI.class);
+		ais.put(ClassId.SAGGITARIUS, SaggitariusAI.class);
+		ais.put(ClassId.MOONLIGHT_SENTINEL, MoonlightSentinelAI.class);		
+		ais.put(ClassId.GHOST_SENTINEL, GhostSentinelAI.class);		
+		ais.put(ClassId.ADVENTURER, AdventurerAI.class);
+		ais.put(ClassId.WIND_RIDER, WindRiderAI.class);
+		ais.put(ClassId.GHOST_HUNTER, GhostHunterAI.class);
+		ais.put(ClassId.DOMINATOR, DominatorAI.class);
+		ais.put(ClassId.TITAN, TitanAI.class);
+		ais.put(ClassId.CARDINAL, CardinalAI.class);
 		
 		return ais;
 	}

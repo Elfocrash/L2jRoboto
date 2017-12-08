@@ -16,9 +16,9 @@ import net.sf.l2j.gameserver.model.ShotType;
  * @author Elfocrash
  *
  */
-public class TreasureHunterAI extends CombatAI
+public class AdventurerAI extends CombatAI
 {
-	public TreasureHunterAI(FakePlayer character)
+	public AdventurerAI(FakePlayer character)
 	{
 		super(character);
 	}

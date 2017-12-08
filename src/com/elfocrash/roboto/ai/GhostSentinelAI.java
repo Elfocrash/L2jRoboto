@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.elfocrash.roboto.FakePlayer;
 import com.elfocrash.roboto.FakePlayerManager;
+import com.elfocrash.roboto.ai.addon.IConsumableSpender;
 import com.elfocrash.roboto.model.HealingSpell;
 import com.elfocrash.roboto.model.OffensiveSpell;
 import com.elfocrash.roboto.model.SupportSpell;
@@ -16,11 +17,12 @@ import net.sf.l2j.gameserver.model.ShotType;
  * @author Elfocrash
  *
  */
-public class SpellHowlerAI extends CombatAI
+public class GhostSentinelAI extends CombatAI implements IConsumableSpender
 {
-	public SpellHowlerAI(FakePlayer character)
+
+	public GhostSentinelAI(FakePlayer character)
 	{
-		super(character);		
+		super(character);
 	}
 	
 	@Override
@@ -31,34 +33,36 @@ public class SpellHowlerAI extends CombatAI
 		}
 		
 		applyDefaultBuffs();
-		handleShots();
-		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());		
-		tryAttackingUsingMageOffensiveSkill();		
+		handleConsumable(_fakePlayer, getArrowId());
+		selfSupportBuffs();
+		handleShots();	
+		
+		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());	
+		
+		tryAttackingUsingFighterOffensiveSkill();
 	}
 	
 	@Override
 	protected ShotType getShotType()
 	{
-		return ShotType.BLESSED_SPIRITSHOT;
+		return ShotType.SOULSHOT;
 	}
 	
 	@Override
 	protected List<OffensiveSpell> getOffensiveSpells()
 	{
 		List<OffensiveSpell> _offensiveSpells = new ArrayList<>();
-		_offensiveSpells.add(new OffensiveSpell(1341, 1));
-		_offensiveSpells.add(new OffensiveSpell(1343, 2));
-		_offensiveSpells.add(new OffensiveSpell(1234, 3));
-		_offensiveSpells.add(new OffensiveSpell(1239, 4));
-		return _offensiveSpells; 
+		_offensiveSpells.add(new OffensiveSpell(101, 1));
+		_offensiveSpells.add(new OffensiveSpell(343, 1));
+		return _offensiveSpells;
 	}
 	
 	@Override
 	protected int[][] getBuffs()
 	{
-		return FakePlayerManager.INSTANCE.getMageBuffs();
+		return FakePlayerManager.INSTANCE.getFighterBuffs();
 	}
-
+	
 	@Override
 	protected List<HealingSpell> getHealingSpells()
 	{		
@@ -67,6 +71,8 @@ public class SpellHowlerAI extends CombatAI
 	
 	@Override
 	protected List<SupportSpell> getSelfSupportSpells() {
-		return Collections.emptyList();
+		List<SupportSpell> _selfSupportSpells = new ArrayList<>();
+		_selfSupportSpells.add(new SupportSpell(99, 1));
+		return _selfSupportSpells;
 	}
 }

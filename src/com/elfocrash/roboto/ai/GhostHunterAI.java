@@ -16,11 +16,11 @@ import net.sf.l2j.gameserver.model.ShotType;
  * @author Elfocrash
  *
  */
-public class SpellSignerAI extends CombatAI
+public class GhostHunterAI extends CombatAI
 {
-	public SpellSignerAI(FakePlayer character)
+	public GhostHunterAI(FakePlayer character)
 	{
-		super(character);		
+		super(character);
 	}
 	
 	@Override
@@ -31,42 +31,44 @@ public class SpellSignerAI extends CombatAI
 		}
 		
 		applyDefaultBuffs();
-		handleShots();
-		
-		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());	
-		
-		tryAttackingUsingMageOffensiveSkill();
+		handleShots();			
+		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());		
+		tryAttackingUsingFighterOffensiveSkill();
 	}
 	
 	@Override
 	protected ShotType getShotType()
 	{
-		return ShotType.BLESSED_SPIRITSHOT;
+		return ShotType.SOULSHOT;
 	}
 	
 	@Override
-	protected List<OffensiveSpell> getOffensiveSpells()
+	public List<OffensiveSpell> getOffensiveSpells()
 	{
 		List<OffensiveSpell> _offensiveSpells = new ArrayList<>();
-		_offensiveSpells.add(new OffensiveSpell(1235, 4));
-		_offensiveSpells.add(new OffensiveSpell(1340, 3));
-		_offensiveSpells.add(new OffensiveSpell(1342, 2));
-		_offensiveSpells.add(new OffensiveSpell(1265, 1));	
+		_offensiveSpells.add(new OffensiveSpell(263, 1));
+		_offensiveSpells.add(new OffensiveSpell(122, 1));
+		_offensiveSpells.add(new OffensiveSpell(11, 1));
+		_offensiveSpells.add(new OffensiveSpell(410, 1));
+		_offensiveSpells.add(new OffensiveSpell(12, 1));
+		_offensiveSpells.add(new OffensiveSpell(321, 1));
+		_offensiveSpells.add(new OffensiveSpell(344, 1));
+		_offensiveSpells.add(new OffensiveSpell(358, 1));		
 		return _offensiveSpells; 
 	}
 	
 	@Override
 	protected int[][] getBuffs()
 	{
-		return FakePlayerManager.INSTANCE.getMageBuffs();
+		return FakePlayerManager.INSTANCE.getFighterBuffs();
 	}
-
+	
 	@Override
 	protected List<HealingSpell> getHealingSpells()
 	{		
 		return Collections.emptyList();
 	}
-	
+
 	@Override
 	protected List<SupportSpell> getSelfSupportSpells() {
 		return Collections.emptyList();

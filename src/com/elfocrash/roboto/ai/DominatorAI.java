@@ -16,9 +16,9 @@ import net.sf.l2j.gameserver.model.ShotType;
  * @author Elfocrash
  *
  */
-public class OverlordAI extends CombatAI
+public class DominatorAI extends CombatAI
 {
-	public OverlordAI(FakePlayer character)
+	public DominatorAI(FakePlayer character)
 	{
 		super(character);		
 	}

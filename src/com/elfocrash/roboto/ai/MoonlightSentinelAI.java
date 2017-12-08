@@ -17,10 +17,10 @@ import net.sf.l2j.gameserver.model.ShotType;
  * @author Elfocrash
  *
  */
-public class PhantomRangerAI extends CombatAI implements IConsumableSpender
+public class MoonlightSentinelAI extends CombatAI implements IConsumableSpender
 {
 
-	public PhantomRangerAI(FakePlayer character)
+	public MoonlightSentinelAI(FakePlayer character)
 	{
 		super(character);
 	}
