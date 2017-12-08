@@ -14,7 +14,7 @@ import net.sf.l2j.gameserver.model.ShotType;
  * @author Elfocrash
  *
  */
-public class FallbackAI extends FakePlayerAI
+public class FallbackAI extends CombatAI
 {
 
 	public FallbackAI(FakePlayer character)

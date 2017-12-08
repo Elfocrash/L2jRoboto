@@ -17,7 +17,7 @@ import net.sf.l2j.gameserver.model.ShotType;
  * @author Elfocrash
  *
  */
-public class PhantomRangerAI extends FakePlayerAI implements IConsumableSpender
+public class PhantomRangerAI extends CombatAI implements IConsumableSpender
 {
 
 	public PhantomRangerAI(FakePlayer character)

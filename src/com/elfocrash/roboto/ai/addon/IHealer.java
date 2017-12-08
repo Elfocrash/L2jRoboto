@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.elfocrash.roboto.FakePlayer;
+import com.elfocrash.roboto.ai.CombatAI;
 import com.elfocrash.roboto.model.HealingSpell;
 
 import net.sf.l2j.gameserver.model.actor.Creature;
@@ -36,21 +37,22 @@ public interface IHealer {
 		if(player.getTarget() != null && player.getTarget() instanceof Creature)
 		{
 			Creature target = (Creature) player.getTarget();
-			HealingSpell skill = player.getFakeAi().getRandomAvaiableHealingSpellForTarget();
-			if(skill != null) {
-				switch(skill.getCondition()){
-					case LESSHPPERCENT:
-						double currentHpPercentage = Math.round(100.0 / target.getMaxHp() * target.getCurrentHp());
-						if(currentHpPercentage <= skill.getConditionValue()) {
-							player.getFakeAi().castSpell(player.getSkill(skill.getSkillId()));						
-						}						
-						break;				
-					default:
-						break;							
+			if(player.getFakeAi() instanceof CombatAI) {
+				HealingSpell skill = ((CombatAI)player.getFakeAi()).getRandomAvaiableHealingSpellForTarget();
+				if(skill != null) {
+					switch(skill.getCondition()){
+						case LESSHPPERCENT:
+							double currentHpPercentage = Math.round(100.0 / target.getMaxHp() * target.getCurrentHp());
+							if(currentHpPercentage <= skill.getConditionValue()) {
+								player.getFakeAi().castSpell(player.getSkill(skill.getSkillId()));						
+							}						
+							break;				
+						default:
+							break;							
+					}
+					
 				}
-				
 			}
-				
 		}
 	}
 }

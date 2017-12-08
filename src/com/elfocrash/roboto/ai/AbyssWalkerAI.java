@@ -16,7 +16,7 @@ import net.sf.l2j.gameserver.model.ShotType;
  * @author Elfocrash
  *
  */
-public class AbyssWalkerAI extends FakePlayerAI
+public class AbyssWalkerAI extends CombatAI
 {
 	public AbyssWalkerAI(FakePlayer character)
 	{

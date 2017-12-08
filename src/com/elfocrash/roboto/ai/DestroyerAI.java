@@ -6,10 +6,10 @@ import java.util.List;
 
 import com.elfocrash.roboto.FakePlayer;
 import com.elfocrash.roboto.FakePlayerManager;
-import com.elfocrash.roboto.model.SupportSpell;
 import com.elfocrash.roboto.model.HealingSpell;
 import com.elfocrash.roboto.model.OffensiveSpell;
 import com.elfocrash.roboto.model.SpellUsageCondition;
+import com.elfocrash.roboto.model.SupportSpell;
 
 import net.sf.l2j.gameserver.model.ShotType;
 
@@ -17,7 +17,7 @@ import net.sf.l2j.gameserver.model.ShotType;
  * @author Elfocrash
  *
  */
-public class DestroyerAI extends FakePlayerAI
+public class DestroyerAI extends CombatAI
 {
 	public DestroyerAI(FakePlayer character)
 	{

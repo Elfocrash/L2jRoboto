@@ -17,7 +17,7 @@ import net.sf.l2j.gameserver.model.ShotType;
  * @author Elfocrash
  *
  */
-public class SilverRangerAI extends FakePlayerAI implements IConsumableSpender
+public class SilverRangerAI extends CombatAI implements IConsumableSpender
 {
 
 	public SilverRangerAI(FakePlayer character)

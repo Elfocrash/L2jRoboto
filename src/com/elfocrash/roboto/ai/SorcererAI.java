@@ -16,7 +16,7 @@ import net.sf.l2j.gameserver.model.ShotType;
  * @author Elfocrash
  *
  */
-public class SorcererAI extends FakePlayerAI
+public class SorcererAI extends CombatAI
 {
 	public SorcererAI(FakePlayer character)
 	{

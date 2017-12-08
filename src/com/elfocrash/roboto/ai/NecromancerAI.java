@@ -17,7 +17,7 @@ import net.sf.l2j.gameserver.model.ShotType;
  * @author Elfocrash
  *
  */
-public class NecromancerAI extends FakePlayerAI implements IConsumableSpender
+public class NecromancerAI extends CombatAI implements IConsumableSpender
 {
 	public NecromancerAI(FakePlayer character)
 	{

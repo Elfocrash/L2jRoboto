@@ -17,7 +17,7 @@ import net.sf.l2j.gameserver.model.ShotType;
  * @author Elfocrash
  *
  */
-public class HawkeyeAI extends FakePlayerAI implements IConsumableSpender
+public class HawkeyeAI extends CombatAI implements IConsumableSpender
 {
 
 	public HawkeyeAI(FakePlayer character)

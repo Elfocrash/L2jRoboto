@@ -24,7 +24,12 @@ public class AITask implements Runnable
 	{				
 		adjustPotentialIndexOutOfBounds();
 		List<FakePlayer> fakePlayers = FakePlayerManager.INSTANCE.getFakePlayers().subList(_from, _to);		
-		fakePlayers.stream().filter(x-> !x.getFakeAi().isPickingMageSpell()).forEach(x-> x.getFakeAi().thinkAndAct());
+		try {
+			fakePlayers.stream().filter(x-> !x.getFakeAi().isBusyThinking()).forEach(x-> x.getFakeAi().thinkAndAct());	
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		
 	}	
 	
 	private void adjustPotentialIndexOutOfBounds() {

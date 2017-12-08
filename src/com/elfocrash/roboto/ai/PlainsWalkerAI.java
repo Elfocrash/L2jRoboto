@@ -16,7 +16,7 @@ import net.sf.l2j.gameserver.model.ShotType;
  * @author Elfocrash
  *
  */
-public class PlainsWalkerAI extends FakePlayerAI
+public class PlainsWalkerAI extends CombatAI
 {
 	public PlainsWalkerAI(FakePlayer character)
 	{
