@@ -17,7 +17,7 @@ public enum FakePlayerTaskManager
 	INSTANCE;
 	
 	private final int aiTaskRunnerInterval = 2000;
-	private final int _playerCountPerTask = 120;
+	private final int _playerCountPerTask = 500;
 	private List<AITask> _aiTasks;
 	
 	private FakePlayerTaskManager(){

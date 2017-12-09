@@ -100,12 +100,6 @@ public abstract class FakePlayerAI
 			}
 			else
 			{
-				if(_fakePlayer.getTarget() != null )
-					if(!GeoEngine.getInstance().canSeeTarget(_fakePlayer, _fakePlayer.getTarget())){
-					_fakePlayer.getFakeAi().moveToPawn(_fakePlayer.getTarget(), 50);
-					return;
-				}
-				
 				if (checkTargetLost(_fakePlayer.getTarget()))
 				{
 					if (skill.isOffensive() && _fakePlayer.getTarget() != null)
@@ -115,10 +109,11 @@ public abstract class FakePlayerAI
 					return;
 				}
 				
-				if (_fakePlayer.getTarget() != null && maybeMoveToPawn(_fakePlayer.getTarget(), skill.getCastRange()))
+				if (_fakePlayer.getTarget() != null)
 				{
-					_fakePlayer.setIsCastingNow(false);
-					return;
+					if(maybeMoveToPawn(_fakePlayer.getTarget(), skill.getCastRange())) {
+						return;
+					}
 				}
 				
 				if (_fakePlayer.isSkillDisabled(skill)) {
@@ -313,10 +308,18 @@ public abstract class FakePlayerAI
 				if (offset < 5)
 					offset = 5;
 			}
-			else
-				moveToPawn(target, offset);
+			
+			moveToPawn(target, offset);
+			
 			return true;
 		}
+		
+		if(!GeoEngine.getInstance().canSeeTarget(_fakePlayer, _fakePlayer.getTarget())){
+			_fakePlayer.setIsCastingNow(false);
+			moveToPawn(target, 50);			
+			return true;
+		}
+		
 		
 		return false;
 	}	

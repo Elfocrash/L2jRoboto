@@ -44,7 +44,7 @@ public abstract class CombatAI extends FakePlayerAI {
 				if(skill != null) {
 					castSpell(skill);
 				}
-			}			
+			}	
 			_fakePlayer.forceAutoAttack((Creature)_fakePlayer.getTarget());
 		}
 	}
@@ -105,6 +105,9 @@ public abstract class CombatAI extends FakePlayerAI {
 	
 	public HealingSpell getRandomAvaiableHealingSpellForTarget() {
 
+		if(getHealingSpells().isEmpty())
+			return null;
+		
 		List<HealingSpell> spellsOrdered = getHealingSpells().stream().sorted((o1, o2)-> Integer.compare(o1.getPriority(), o2.getPriority())).collect(Collectors.toList());
 		int skillListSize = spellsOrdered.size();
 		BotSkill skill = waitAndPickAvailablePrioritisedSpell(spellsOrdered, skillListSize);

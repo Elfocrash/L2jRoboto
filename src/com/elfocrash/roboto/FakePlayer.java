@@ -96,15 +96,12 @@ public class FakePlayer extends Player
 		
 		if (isFishing() && (sklType != L2SkillType.PUMPING && sklType != L2SkillType.REELING && sklType != L2SkillType.FISHING))
 		{
-			sendPacket(SystemMessageId.ONLY_FISHING_SKILLS_NOW);
 			return false;
 		}
 		
 		if (isInObserverMode())
 		{
-			sendPacket(SystemMessageId.OBSERVERS_CANNOT_PARTICIPATE);
 			abortCast();
-			sendPacket(ActionFailed.STATIC_PACKET);
 			return false;
 		}
 		
@@ -116,12 +113,9 @@ public class FakePlayer extends Player
 				if (effect != null)
 				{
 					effect.exit();
-					sendPacket(ActionFailed.STATIC_PACKET);
 					return false;
 				}
 			}			
-			sendPacket(SystemMessageId.CANT_MOVE_SITTING);
-			sendPacket(ActionFailed.STATIC_PACKET);
 			return false;
 		}
 		
