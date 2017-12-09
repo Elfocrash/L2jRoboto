@@ -69,6 +69,10 @@ public abstract class FakePlayerAI
 		}
 	}
 	
+	public void setBusyThinking(boolean thinking) {
+		_isBusyThinking = thinking;
+	}
+	
 	public boolean isBusyThinking() {
 		return _isBusyThinking;
 	}

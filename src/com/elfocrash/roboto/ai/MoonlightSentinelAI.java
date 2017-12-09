@@ -32,14 +32,14 @@ public class MoonlightSentinelAI extends CombatAI implements IConsumableSpender
 			return;
 		}
 		
+		setBusyThinking(true);
 		applyDefaultBuffs();
 		handleConsumable(_fakePlayer, getArrowId());
 		selfSupportBuffs();
-		handleShots();	
-		
-		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());	
-		
+		handleShots();		
+		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());		
 		tryAttackingUsingFighterOffensiveSkill();
+		setBusyThinking(false);
 	}
 	
 	@Override

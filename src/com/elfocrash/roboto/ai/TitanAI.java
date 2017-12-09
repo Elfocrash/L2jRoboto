@@ -31,11 +31,13 @@ public class TitanAI extends CombatAI
 			return;
 		}
 		
+		setBusyThinking(true);
 		applyDefaultBuffs();
 		handleShots();
 		selfSupportBuffs();
 		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());		
 		tryAttackingUsingFighterOffensiveSkill();
+		setBusyThinking(false);
 	}
 	
 	@Override

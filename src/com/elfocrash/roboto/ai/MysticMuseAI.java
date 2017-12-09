@@ -16,9 +16,9 @@ import net.sf.l2j.gameserver.model.ShotType;
  * @author Elfocrash
  *
  */
-public class MysticMuse extends CombatAI
+public class MysticMuseAI extends CombatAI
 {
-	public MysticMuse(FakePlayer character)
+	public MysticMuseAI(FakePlayer character)
 	{
 		super(character);		
 	}
@@ -30,12 +30,12 @@ public class MysticMuse extends CombatAI
 			return;
 		}
 		
+		setBusyThinking(true);
 		applyDefaultBuffs();
-		handleShots();
-		
-		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());	
-		
+		handleShots();		
+		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());		
 		tryAttackingUsingMageOffensiveSkill();
+		setBusyThinking(false);
 	}
 	
 	@Override

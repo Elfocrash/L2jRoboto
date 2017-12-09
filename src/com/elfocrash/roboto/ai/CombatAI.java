@@ -39,13 +39,14 @@ public abstract class CombatAI extends FakePlayerAI {
 	
 	protected void tryAttackingUsingFighterOffensiveSkill()	{
 		if(_fakePlayer.getTarget() != null && _fakePlayer.getTarget() instanceof Creature) {			
+			_fakePlayer.forceAutoAttack((Creature)_fakePlayer.getTarget());
 			if(getOffensiveSpells() != null && !getOffensiveSpells().isEmpty()) {
 				L2Skill skill = getRandomAvaiableFighterSpellForTarget();			
 				if(skill != null) {
 					castSpell(skill);
 				}
 			}	
-			_fakePlayer.forceAutoAttack((Creature)_fakePlayer.getTarget());
+			//_fakePlayer.forceAutoAttack((Creature)_fakePlayer.getTarget());
 		}
 	}
 	
@@ -219,7 +220,7 @@ public abstract class CombatAI extends FakePlayerAI {
 			
 		}
 	}
-	
+		
 	private double getMissingHealth() {
 		return _fakePlayer.getMaxCp() - _fakePlayer.getCurrentCp();
 	}

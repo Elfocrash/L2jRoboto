@@ -32,12 +32,14 @@ public class SaggitariusAI extends CombatAI implements IConsumableSpender
 			return;
 		}
 		
+		setBusyThinking(true);
 		applyDefaultBuffs();
 		selfSupportBuffs();
 		handleConsumable(_fakePlayer, getArrowId());
 		handleShots();		
 		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());
 		tryAttackingUsingFighterOffensiveSkill();
+		setBusyThinking(false);
 	}
 	
 	@Override

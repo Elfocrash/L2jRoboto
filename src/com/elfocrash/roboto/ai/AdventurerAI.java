@@ -30,10 +30,12 @@ public class AdventurerAI extends CombatAI
 			return;
 		}
 		
+		setBusyThinking(true);		
 		applyDefaultBuffs();
 		handleShots();			
 		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());		
 		tryAttackingUsingFighterOffensiveSkill();
+		setBusyThinking(false);
 	}
 	
 	@Override

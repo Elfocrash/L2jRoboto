@@ -19,6 +19,8 @@ import net.sf.l2j.gameserver.model.ShotType;
  */
 public class SoultakerAI extends CombatAI implements IConsumableSpender
 {
+	private final int boneId = 2508;
+	
 	public SoultakerAI(FakePlayer character)
 	{
 		super(character);		
@@ -31,14 +33,13 @@ public class SoultakerAI extends CombatAI implements IConsumableSpender
 			return;
 		}
 		
+		setBusyThinking(true);
 		applyDefaultBuffs();
-		handleConsumable(_fakePlayer, 2508);		
-		
+		handleConsumable(_fakePlayer, boneId);		
 		handleShots();		
-		
-		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());	
-		
+		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());		
 		tryAttackingUsingMageOffensiveSkill();
+		setBusyThinking(false);
 	}
 	
 	@Override

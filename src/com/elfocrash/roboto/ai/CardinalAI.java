@@ -32,10 +32,12 @@ public class CardinalAI extends CombatAI implements IHealer
 			return;
 		}
 		
+		setBusyThinking(true);
 		applyDefaultBuffs();
 		handleShots();		
 		tryTargetingLowestHpTargetInRadius(_fakePlayer, FakePlayer.class, FakePlayerManager.INSTANCE.getTestTargetRange());
 		tryHealingTarget(_fakePlayer);
+		setBusyThinking(false);
 	}
 	
 	@Override

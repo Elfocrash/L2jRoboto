@@ -22,7 +22,7 @@ import com.elfocrash.roboto.ai.WindRiderAI;
 import com.elfocrash.roboto.ai.MoonlightSentinelAI;
 import com.elfocrash.roboto.ai.ArchmageAI;
 import com.elfocrash.roboto.ai.StormScreamerAI;
-import com.elfocrash.roboto.ai.MysticMuse;
+import com.elfocrash.roboto.ai.MysticMuseAI;
 import com.elfocrash.roboto.ai.AdventurerAI;
 
 import net.sf.l2j.Config;
@@ -75,7 +75,7 @@ public enum FakePlayerManager
 	}
 	
 	public int getTestTargetRange() {
-		return 2000;
+		return 1200;
 	}
 	
 	public void initialise() {
@@ -350,7 +350,7 @@ public enum FakePlayerManager
 		//classes.add(ClassId.SPECTRAL_MASTER);
 		//classes.add(ClassId.SHILLIEN_SAINT);
 		
-		/*classes.add(ClassId.SAGGITARIUS);
+		classes.add(ClassId.SAGGITARIUS);
 		classes.add(ClassId.ARCHMAGE);
 		classes.add(ClassId.SOULTAKER);
 		classes.add(ClassId.MYSTIC_MUSE);
@@ -362,7 +362,7 @@ public enum FakePlayerManager
 		classes.add(ClassId.DOMINATOR);
 		classes.add(ClassId.TITAN);
 		classes.add(ClassId.CARDINAL);
-		classes.add(ClassId.DUELIST);*/
+		classes.add(ClassId.DUELIST);
 		
 		classes.add(ClassId.GRAND_KHAVATARI);
 		
@@ -371,8 +371,8 @@ public enum FakePlayerManager
 
 	public Map<ClassId, Class<? extends FakePlayerAI>> getAllAIs() {
 		Map<ClassId, Class<? extends FakePlayerAI>> ais = new HashMap<>();
-		/*ais.put(ClassId.STORM_SCREAMER, StormScreamerAI.class);
-		ais.put(ClassId.MYSTIC_MUSE, MysticMuse.class);
+		ais.put(ClassId.STORM_SCREAMER, StormScreamerAI.class);
+		ais.put(ClassId.MYSTIC_MUSE, MysticMuseAI.class);
 		ais.put(ClassId.ARCHMAGE, ArchmageAI.class);
 		ais.put(ClassId.SOULTAKER, SoultakerAI.class);
 		ais.put(ClassId.SAGGITARIUS, SaggitariusAI.class);
@@ -384,7 +384,7 @@ public enum FakePlayerManager
 		ais.put(ClassId.DOMINATOR, DominatorAI.class);
 		ais.put(ClassId.TITAN, TitanAI.class);
 		ais.put(ClassId.CARDINAL, CardinalAI.class);
-		ais.put(ClassId.DUELIST, DuelistAI.class);*/
+		ais.put(ClassId.DUELIST, DuelistAI.class);
 		
 		ais.put(ClassId.GRAND_KHAVATARI, GrandKhavatariAI.class);
 		return ais;

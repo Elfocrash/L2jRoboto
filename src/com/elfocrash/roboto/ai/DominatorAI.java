@@ -30,12 +30,12 @@ public class DominatorAI extends CombatAI
 			return;
 		}
 		
-		applyDefaultBuffs();
-		
+		setBusyThinking(true);
+		applyDefaultBuffs();		
 		handleShots();		
-		
 		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());		
 		tryAttackingUsingMageOffensiveSkill();
+		setBusyThinking(false);
 	}
 	
 	@Override

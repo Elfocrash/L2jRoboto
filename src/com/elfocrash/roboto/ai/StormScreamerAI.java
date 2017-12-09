@@ -30,10 +30,12 @@ public class StormScreamerAI extends CombatAI
 			return;
 		}
 		
+		setBusyThinking(true);
 		applyDefaultBuffs();
 		handleShots();
 		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());		
-		tryAttackingUsingMageOffensiveSkill();		
+		tryAttackingUsingMageOffensiveSkill();
+		setBusyThinking(false);
 	}
 	
 	@Override
