@@ -31,7 +31,7 @@ public abstract class CombatAI extends FakePlayerAI {
 			if(botSkill == null)
 				return;
 			
-			L2Skill skill = _fakePlayer.getSkill(getRandomAvaiableMageSpellForTarget().getSkillId());
+			L2Skill skill = _fakePlayer.getSkill(botSkill.getSkillId());
 			if(skill != null)
 				castSpell(skill);
 		}
