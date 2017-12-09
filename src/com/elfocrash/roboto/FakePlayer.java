@@ -451,25 +451,7 @@ public class FakePlayer extends Player
 			return false;
 		}
 		
-		// GeoData Los Check here
-		if (skill.getCastRange() > 0)
-		{
-			if (sklTargetType == SkillTargetType.TARGET_GROUND)
-			{
-				if (!GeoEngine.getInstance().canSeeTarget(this, worldPosition))
-				{
-					sendPacket(SystemMessageId.CANT_SEE_TARGET);
-					sendPacket(ActionFailed.STATIC_PACKET);
-					return false;
-				}
-			}
-			else if (!GeoEngine.getInstance().canSeeTarget(this, target))
-			{
-				sendPacket(SystemMessageId.CANT_SEE_TARGET);
-				sendPacket(ActionFailed.STATIC_PACKET);
-				return false;
-			}
-		}
+		
 		// finally, after passing all conditions
 		return true;
 	}

@@ -121,7 +121,9 @@ public abstract class FakePlayerAI
 					return;
 				}
 				
-				if (_fakePlayer.isSkillDisabled(skill)) {}					
+				if (_fakePlayer.isSkillDisabled(skill)) {
+					return;
+				}					
 			}
 			
 			if (skill.getHitTime() > 50 && !skill.isSimultaneousCast())

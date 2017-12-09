@@ -15,6 +15,7 @@ import com.elfocrash.roboto.ai.FallbackAI;
 import com.elfocrash.roboto.ai.SaggitariusAI;
 import com.elfocrash.roboto.ai.SoultakerAI;
 import com.elfocrash.roboto.ai.DominatorAI;
+import com.elfocrash.roboto.ai.DuelistAI;
 import com.elfocrash.roboto.ai.GhostSentinelAI;
 import com.elfocrash.roboto.ai.WindRiderAI;
 import com.elfocrash.roboto.ai.MoonlightSentinelAI;
@@ -330,8 +331,7 @@ public enum FakePlayerManager
 		classes.add(ClassId.SHILLIEN_TEMPLAR);
 		classes.add(ClassId.SPECTRAL_DANCER);
 		classes.add(ClassId.GHOST_HUNTER);
-
-		classes.add(ClassId.DUELIST);
+		
 		classes.add(ClassId.DREADNOUGHT);
 		classes.add(ClassId.PHOENIX_KNIGHT);
 		classes.add(ClassId.HELL_KNIGHT);
@@ -364,6 +364,7 @@ public enum FakePlayerManager
 		classes.add(ClassId.DOMINATOR);
 		classes.add(ClassId.TITAN);
 		classes.add(ClassId.CARDINAL);
+		classes.add(ClassId.DUELIST);
 		
 		return classes;
 	}
@@ -414,6 +415,7 @@ public enum FakePlayerManager
 		ais.put(ClassId.DOMINATOR, DominatorAI.class);
 		ais.put(ClassId.TITAN, TitanAI.class);
 		ais.put(ClassId.CARDINAL, CardinalAI.class);
+		ais.put(ClassId.DUELIST, DuelistAI.class);
 		
 		return ais;
 	}

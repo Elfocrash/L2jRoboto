@@ -11,6 +11,7 @@ import com.elfocrash.roboto.model.OffensiveSpell;
 import com.elfocrash.roboto.model.SupportSpell;
 
 import net.sf.l2j.gameserver.datatables.SkillTable;
+import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.ShotType;
 import net.sf.l2j.gameserver.model.actor.Creature;
@@ -115,12 +116,7 @@ public abstract class CombatAI extends FakePlayerAI {
 		List<OffensiveSpell> spellsOrdered = getOffensiveSpells().stream().sorted((o1, o2)-> Integer.compare(o1.getPriority(), o2.getPriority())).collect(Collectors.toList());
 		int skillListSize = spellsOrdered.size();
 		
-		BotSkill skill = null;
-		try {
-			skill = waitAndPickAvailablePrioritisedSpell(spellsOrdered, skillListSize);	
-		}catch(NullPointerException ex) {
-			ex.printStackTrace();
-		}
+		BotSkill skill = waitAndPickAvailablePrioritisedSpell(spellsOrdered, skillListSize);	
 		
 		return skill;
 	}
@@ -130,6 +126,16 @@ public abstract class CombatAI extends FakePlayerAI {
 		BotSkill botSkill = spellsOrdered.get(skillIndex);
 		_fakePlayer.getCurrentSkill().setCtrlPressed(!_fakePlayer.getTarget().isInsideZone(ZoneId.PEACE));
 		L2Skill skill = _fakePlayer.getSkill(botSkill.getSkillId());
+		
+		if (skill.getCastRange() > 0)
+		{
+			if (!GeoEngine.getInstance().canSeeTarget(_fakePlayer, _fakePlayer.getTarget()))
+			{
+				moveToPawn(_fakePlayer.getTarget(), 100);//skill.getCastRange()
+				return null;
+			}
+		}
+		
 		while(!_fakePlayer.checkUseMagicConditions(skill,true,false)) {
 			
 			_isBusyThinking = true;
