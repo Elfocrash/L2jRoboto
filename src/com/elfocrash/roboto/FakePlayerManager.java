@@ -38,6 +38,7 @@ import net.sf.l2j.gameserver.instancemanager.SevenSigns.CabalType;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns.SealType;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.World;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.appearance.PcAppearance;
 import net.sf.l2j.gameserver.model.actor.instance.Monster;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
@@ -68,7 +69,7 @@ public enum FakePlayerManager
 		
 	}
 	
-	public Class<? extends Monster> getTestTargetClass(){
+	public Class<? extends Creature> getTestTargetClass(){
 		return Monster.class;
 	}
 	
@@ -98,6 +99,7 @@ public enum FakePlayerManager
 		if (!activeChar.isGM() && (!activeChar.isInSiege() || activeChar.getSiegeState() < 2) && activeChar.isInsideZone(ZoneId.SIEGE))
 			activeChar.teleToLocation(TeleportType.TOWN);
 		
+		activeChar.heal();		
 		assignDefaultAIToPlayer(activeChar);		
 	}
 	
@@ -194,12 +196,10 @@ public enum FakePlayerManager
 		player.setBaseClass(player.getClassId());		
 		setLevel(player, 81);		
 		player.giveAvailableSkills();
-		
-		player.setCurrentCp(player.getMaxCp());
-		player.setCurrentHp(player.getMaxHp());
-		player.setCurrentMp(player.getMaxMp());		
+				
 		giveArmorsByClass(player);
 		giveWeaponsByClass(player);
+		player.heal();
 		
 		return player;	
 	}
@@ -334,8 +334,7 @@ public enum FakePlayerManager
 		
 		classes.add(ClassId.DREADNOUGHT);
 		classes.add(ClassId.PHOENIX_KNIGHT);
-		classes.add(ClassId.HELL_KNIGHT);
-		
+		classes.add(ClassId.HELL_KNIGHT);		
 		
 		classes.add(ClassId.HIEROPHANT);
 		classes.add(ClassId.EVAS_TEMPLAR);

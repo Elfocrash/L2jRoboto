@@ -156,7 +156,7 @@ public abstract class CombatAI extends FakePlayerAI {
 	}
 	
 	protected L2Skill getRandomAvaiableFighterSpellForTarget() {	
-		int maxRetries = 10;
+		int maxRetries = 5;
 		int retries = 0;
 		List<OffensiveSpell> spellsOrdered = getOffensiveSpells().stream().sorted((o1, o2)-> Integer.compare(o1.getPriority(), o2.getPriority())).collect(Collectors.toList());
 		int skillIndex = 0;
@@ -173,6 +173,9 @@ public abstract class CombatAI extends FakePlayerAI {
 			retries++;
 			skillIndex++;
 		}
+		
+		if(!_fakePlayer.checkUseMagicConditions(skill,true,false))
+			return null;
 
 		return skill;
 	}
@@ -186,7 +189,7 @@ public abstract class CombatAI extends FakePlayerAI {
 			if(activeEffects.contains(selfBuff.getSkillId()))
 				continue;
 			
-			L2Skill skill = SkillTable.getInstance().getInfo(selfBuff.getSkillId(), _fakePlayer.getSkillLevel(selfBuff.getSkillId()));
+			L2Skill skill = SkillTable.getInstance().getInfo(selfBuff.getSkillId(), _fakePlayer.getSkillLevel(selfBuff.getSkillId()));			
 			
 			if(!_fakePlayer.checkUseMagicConditions(skill,true,false))
 				continue;
@@ -197,6 +200,11 @@ public abstract class CombatAI extends FakePlayerAI {
 						castSelfSpell(skill);						
 					}						
 					break;
+				case MISSINGCP:
+					if(getMissingHealth() >= selfBuff.getConditionValue()) {
+						castSelfSpell(skill);	
+					}
+					break;
 				case NONE:
 					castSelfSpell(skill);		
 				default:
@@ -204,6 +212,10 @@ public abstract class CombatAI extends FakePlayerAI {
 			}
 			
 		}
+	}
+	
+	private double getMissingHealth() {
+		return _fakePlayer.getMaxCp() - _fakePlayer.getCurrentCp();
 	}
 
 	protected abstract ShotType getShotType();

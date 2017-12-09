@@ -462,9 +462,6 @@ public class FakePlayer extends Player
 		
 		if (isInsidePeaceZone(this, this.getTarget()))
 		{
-			// If Creature or target is in a peace zone, send a system message TARGET_IN_PEACEZONE ActionFailed
-			sendPacket(SystemMessageId.TARGET_IN_PEACEZONE);
-			sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
 		
@@ -473,31 +470,23 @@ public class FakePlayer extends Player
 			Player target = getTarget().getActingPlayer();
 			if (target == null || (target.isInOlympiadMode() && (!isOlympiadStart() || getOlympiadGameId() != target.getOlympiadGameId())))
 			{
-				// if Player is in Olympia and the match isn't already start, send ActionFailed
-				sendPacket(ActionFailed.STATIC_PACKET);
 				return;
 			}
 		}
 		
 		if (getTarget() != null && !getTarget().isAttackable() && !getAccessLevel().allowPeaceAttack())
 		{
-			// If target is not attackable, send ActionFailed
-			sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
 		
 		if (isConfused())
 		{
-			// If target is confused, send ActionFailed
-			sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
 		
 		// GeoData Los Check or dz > 1000
 		if (!GeoEngine.getInstance().canSeeTarget(this,this.getTarget()))
 		{
-			sendPacket(SystemMessageId.CANT_SEE_TARGET);
-			sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
 		
@@ -624,5 +613,11 @@ public class FakePlayer extends Player
 		{
 			_log.log(Level.WARNING, "Exception on despawnPlayer()" + e.getMessage(), e);
 		}
+	}
+
+	public void heal() {
+		setCurrentCp(getMaxCp());
+		setCurrentHp(getMaxHp());
+		setCurrentMp(getMaxMp());
 	}
 }

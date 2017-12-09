@@ -8,6 +8,7 @@ import com.elfocrash.roboto.FakePlayerManager;
 import com.elfocrash.roboto.ai.addon.IConsumableSpender;
 import com.elfocrash.roboto.model.HealingSpell;
 import com.elfocrash.roboto.model.OffensiveSpell;
+import com.elfocrash.roboto.model.SpellUsageCondition;
 import com.elfocrash.roboto.model.SupportSpell;
 
 import net.sf.l2j.gameserver.model.ShotType;
@@ -52,6 +53,7 @@ public class DuelistAI extends CombatAI implements IConsumableSpender {
 		List<SupportSpell> _selfSupportSpells = new ArrayList<>();
 		_selfSupportSpells.add(new SupportSpell(139, 1));
 		_selfSupportSpells.add(new SupportSpell(297, 2));
+		_selfSupportSpells.add(new SupportSpell(440, SpellUsageCondition.MISSINGCP, 1000, 3));
 		return _selfSupportSpells;
 	}
 	
