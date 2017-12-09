@@ -159,7 +159,7 @@ public abstract class CombatAI extends FakePlayerAI {
 	}
 	
 	protected L2Skill getRandomAvaiableFighterSpellForTarget() {	
-		int maxRetries = 5;
+		int maxRetries = 1;
 		int retries = 0;
 		List<OffensiveSpell> spellsOrdered = getOffensiveSpells().stream().sorted((o1, o2)-> Integer.compare(o1.getPriority(), o2.getPriority())).collect(Collectors.toList());
 		int skillIndex = 0;
@@ -177,8 +177,11 @@ public abstract class CombatAI extends FakePlayerAI {
 			skillIndex++;
 		}
 		
-		if(!_fakePlayer.checkUseMagicConditions(skill,true,false))
+		if(!_fakePlayer.checkUseMagicConditions(skill,true,false)) {
+			_fakePlayer.forceAutoAttack((Creature)_fakePlayer.getTarget());
 			return null;
+		}
+			
 
 		return skill;
 	}

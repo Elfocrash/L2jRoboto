@@ -125,6 +125,8 @@ public abstract class FakePlayerAI
 				clientStopMoving(null);
 			
 			_fakePlayer.doCast(skill);
+		}else {
+			_fakePlayer.forceAutoAttack((Creature)_fakePlayer.getTarget());
 		}
 	}
 	

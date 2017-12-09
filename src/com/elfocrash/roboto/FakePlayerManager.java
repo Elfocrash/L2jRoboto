@@ -17,6 +17,7 @@ import com.elfocrash.roboto.ai.SoultakerAI;
 import com.elfocrash.roboto.ai.DominatorAI;
 import com.elfocrash.roboto.ai.DuelistAI;
 import com.elfocrash.roboto.ai.GhostSentinelAI;
+import com.elfocrash.roboto.ai.GrandKhavatariAI;
 import com.elfocrash.roboto.ai.WindRiderAI;
 import com.elfocrash.roboto.ai.MoonlightSentinelAI;
 import com.elfocrash.roboto.ai.ArchmageAI;
@@ -74,7 +75,7 @@ public enum FakePlayerManager
 	}
 	
 	public int getTestTargetRange() {
-		return 1200;
+		return 2000;
 	}
 	
 	public void initialise() {
@@ -340,8 +341,6 @@ public enum FakePlayerManager
 		classes.add(ClassId.EVAS_TEMPLAR);
 		classes.add(ClassId.SWORD_MUSE);
 		
-		classes.add(ClassId.GRAND_KHAVATARI);
-		
 		classes.add(ClassId.DOOMCRYER);
 		classes.add(ClassId.FORTUNE_SEEKER);
 		classes.add(ClassId.MAESTRO);*/
@@ -351,7 +350,7 @@ public enum FakePlayerManager
 		//classes.add(ClassId.SPECTRAL_MASTER);
 		//classes.add(ClassId.SHILLIEN_SAINT);
 		
-		classes.add(ClassId.SAGGITARIUS);
+		/*classes.add(ClassId.SAGGITARIUS);
 		classes.add(ClassId.ARCHMAGE);
 		classes.add(ClassId.SOULTAKER);
 		classes.add(ClassId.MYSTIC_MUSE);
@@ -363,11 +362,34 @@ public enum FakePlayerManager
 		classes.add(ClassId.DOMINATOR);
 		classes.add(ClassId.TITAN);
 		classes.add(ClassId.CARDINAL);
-		classes.add(ClassId.DUELIST);
+		classes.add(ClassId.DUELIST);*/
+		
+		classes.add(ClassId.GRAND_KHAVATARI);
 		
 		return classes;
 	}
 
+	public Map<ClassId, Class<? extends FakePlayerAI>> getAllAIs() {
+		Map<ClassId, Class<? extends FakePlayerAI>> ais = new HashMap<>();
+		/*ais.put(ClassId.STORM_SCREAMER, StormScreamerAI.class);
+		ais.put(ClassId.MYSTIC_MUSE, MysticMuse.class);
+		ais.put(ClassId.ARCHMAGE, ArchmageAI.class);
+		ais.put(ClassId.SOULTAKER, SoultakerAI.class);
+		ais.put(ClassId.SAGGITARIUS, SaggitariusAI.class);
+		ais.put(ClassId.MOONLIGHT_SENTINEL, MoonlightSentinelAI.class);		
+		ais.put(ClassId.GHOST_SENTINEL, GhostSentinelAI.class);		
+		ais.put(ClassId.ADVENTURER, AdventurerAI.class);
+		ais.put(ClassId.WIND_RIDER, WindRiderAI.class);
+		ais.put(ClassId.GHOST_HUNTER, GhostHunterAI.class);
+		ais.put(ClassId.DOMINATOR, DominatorAI.class);
+		ais.put(ClassId.TITAN, TitanAI.class);
+		ais.put(ClassId.CARDINAL, CardinalAI.class);
+		ais.put(ClassId.DUELIST, DuelistAI.class);*/
+		
+		ais.put(ClassId.GRAND_KHAVATARI, GrandKhavatariAI.class);
+		return ais;
+	}
+	
 	public PcAppearance getRandomAppearance(ClassRace race) {
 		
 		Sex randomSex = Rnd.get(1, 2) == 1 ? Sex.MALE : Sex.FEMALE;
@@ -397,26 +419,6 @@ public enum FakePlayerManager
 			return FallbackAI.class;
 		
 		return ai;
-	}
-	
-	public Map<ClassId, Class<? extends FakePlayerAI>> getAllAIs() {
-		Map<ClassId, Class<? extends FakePlayerAI>> ais = new HashMap<>();
-		ais.put(ClassId.STORM_SCREAMER, StormScreamerAI.class);
-		ais.put(ClassId.MYSTIC_MUSE, MysticMuse.class);
-		ais.put(ClassId.ARCHMAGE, ArchmageAI.class);
-		ais.put(ClassId.SOULTAKER, SoultakerAI.class);
-		ais.put(ClassId.SAGGITARIUS, SaggitariusAI.class);
-		ais.put(ClassId.MOONLIGHT_SENTINEL, MoonlightSentinelAI.class);		
-		ais.put(ClassId.GHOST_SENTINEL, GhostSentinelAI.class);		
-		ais.put(ClassId.ADVENTURER, AdventurerAI.class);
-		ais.put(ClassId.WIND_RIDER, WindRiderAI.class);
-		ais.put(ClassId.GHOST_HUNTER, GhostHunterAI.class);
-		ais.put(ClassId.DOMINATOR, DominatorAI.class);
-		ais.put(ClassId.TITAN, TitanAI.class);
-		ais.put(ClassId.CARDINAL, CardinalAI.class);
-		ais.put(ClassId.DUELIST, DuelistAI.class);
-		
-		return ais;
 	}
 	
 	public int getFakePlayersCount() {
