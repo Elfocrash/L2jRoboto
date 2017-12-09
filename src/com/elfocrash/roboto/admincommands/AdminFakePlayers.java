@@ -3,6 +3,7 @@ package com.elfocrash.roboto.admincommands;
 import com.elfocrash.roboto.FakePlayer;
 import com.elfocrash.roboto.FakePlayerManager;
 import com.elfocrash.roboto.FakePlayerTaskManager;
+import com.elfocrash.roboto.ai.EnchanterAI;
 
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
@@ -21,7 +22,8 @@ public class AdminFakePlayers implements IAdminCommandHandler
 		"admin_releasecontrol",
 		"admin_fakes",
 		"admin_spawnrandom",
-		"admin_deletefake"
+		"admin_deletefake",
+		"admin_spawnenchanter"
 	};
 	
 	@Override
@@ -53,8 +55,14 @@ public class AdminFakePlayers implements IAdminCommandHandler
 			}
 		}
 		
+		if(command.startsWith("admin_spawnenchanter")) {
+			FakePlayer fakePlayer = FakePlayerManager.INSTANCE.spawnPlayer(activeChar.getX(),activeChar.getY(),activeChar.getZ());
+			fakePlayer.setFakeAi(new EnchanterAI(fakePlayer));
+		}
+		
 		if (command.startsWith("admin_spawnrandom")) {
-			FakePlayerManager.INSTANCE.spawnPlayer(activeChar.getX(),activeChar.getY(),activeChar.getZ());
+			FakePlayer fakePlayer = FakePlayerManager.INSTANCE.spawnPlayer(activeChar.getX(),activeChar.getY(),activeChar.getZ());
+			fakePlayer.assignDefaultAI();
 			if(command.contains(" ")) {
 				String arg = command.split(" ")[1];
 				if(arg.equalsIgnoreCase("htm")) {

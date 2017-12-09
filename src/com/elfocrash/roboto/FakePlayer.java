@@ -78,6 +78,14 @@ public class FakePlayer extends Player
 		this._fakeAi = _fakeAi;
 	}
 	
+	public void assignDefaultAI() {
+		try {
+			setFakeAi(FakePlayerManager.INSTANCE.getAIbyClassId(getClassId()).getConstructor(FakePlayer.class).newInstance(this));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public boolean checkUseMagicConditions(L2Skill skill, boolean forceUse, boolean dontMove)
 	{
 		if(skill == null)
