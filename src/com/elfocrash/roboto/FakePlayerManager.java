@@ -72,6 +72,7 @@ public enum FakePlayerManager {
 	}
 
 	public void initialise() {
+		FakePlayerNameManager.INSTANCE.initialise();
 		FakePlayerTaskManager.INSTANCE.initialise();
 	}
 
@@ -136,9 +137,8 @@ public enum FakePlayerManager {
 
 	public FakePlayer createRandomFakePlayer() {
 		int objectId = IdFactory.getInstance().getNextId();
-		// TODO: Add a wordlist
 		String accountName = "AutoPilot";
-		String playerName = "TotallyReal" + Rnd.get(100000);
+		String playerName = FakePlayerNameManager.INSTANCE.getRandomAvailableName();
 
 		ClassId classId = getThirdClasses().get(Rnd.get(0, getThirdClasses().size() - 1));
 
