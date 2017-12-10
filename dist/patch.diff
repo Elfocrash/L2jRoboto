@@ -1,7 +1,53 @@
-diff --git a/java/net/sf/l2j/gameserver/GameServer.java b/java/net/sf/l2j/gameserver/GameServer.java
-index a51ea6f..ced3aed 100644
---- a/java/net/sf/l2j/gameserver/GameServer.java
-+++ b/java/net/sf/l2j/gameserver/GameServer.java
+diff --git a/aCis_gameserver/data/html/admin/fakeplayers/index.htm b/aCis_gameserver/data/html/admin/fakeplayers/index.htm
+new file mode 100644
+index 0000000..841e9f6
+--- /dev/null
++++ b/aCis_gameserver/data/html/admin/fakeplayers/index.htm
+@@ -0,0 +1,20 @@
++<html><body>
++<table width=260>
++<tr>
++<td width=40></td>	
++<td width=180><center>Fake Players Dashboard</center></td>
++<td width=40></td>
++</tr>
++<tr>
++<td width=180><center>Fake player count: <font color="LEVEL">%fakecount%</font></center></td>
++</tr>
++<tr>
++<td width=180><center>AI Tasks running: <font color="LEVEL">%taskcount%</font></center></td>
++</tr>
++</table><br>
++<center>
++<table width=230>
++<tr><td><a action="bypass admin_spawnrandom htm"><font color="LEVEL">Spawn fake</font></a></td></tr>
++</table>
++</center>
++</body></html>
+\ No newline at end of file
+diff --git a/aCis_gameserver/data/xml/adminCommands.xml b/aCis_gameserver/data/xml/adminCommands.xml
+index 0e4ee14..a9d9b2b 100644
+--- a/aCis_gameserver/data/xml/adminCommands.xml
++++ b/aCis_gameserver/data/xml/adminCommands.xml
+@@ -339,4 +339,13 @@
+ 	<!-- ZONE -->
+ 	<aCar name="admin_zone_check" accessLevel="7"/>
+ 	<aCar name="admin_zone_visual" accessLevel="7"/>
++	
++	<!-- L2j Roboto -->
++	<aCar name="admin_takecontrol" accessLevel="7"/>
++	<aCar name="admin_releasecontrol" accessLevel="7"/>
++	<aCar name="admin_fakes" accessLevel="7"/>
++	<aCar name="admin_spawnrandom" accessLevel="7"/>
++	<aCar name="admin_deletefake" accessLevel="7"/>
++	<aCar name="admin_spawnenchanter" accessLevel="7"/>
++	
+ </list>
+\ No newline at end of file
+diff --git a/aCis_gameserver/java/net/sf/l2j/gameserver/GameServer.java b/aCis_gameserver/java/net/sf/l2j/gameserver/GameServer.java
+index ce870e4..77b9da7 100644
+--- a/aCis_gameserver/java/net/sf/l2j/gameserver/GameServer.java
++++ b/aCis_gameserver/java/net/sf/l2j/gameserver/GameServer.java
 @@ -1,5 +1,7 @@
  package net.sf.l2j.gameserver;
  
@@ -10,19 +56,19 @@ index a51ea6f..ced3aed 100644
  import java.io.File;
  import java.io.FileInputStream;
  import java.io.IOException;
-@@ -273,6 +275,8 @@ public GameServer() throws Exception
- 		StringUtil.printSection("Events");
- 		MonsterRace.getInstance();
+@@ -269,6 +271,8 @@ public GameServer() throws Exception
+ 		DerbyTrackManager.getInstance();
+ 		LotteryManager.getInstance();
  		
 +		FakePlayerManager.INSTANCE.initialise();
 +		
  		if (Config.ALLOW_WEDDING)
  			CoupleManager.getInstance();
  		
-diff --git a/java/net/sf/l2j/gameserver/handler/AdminCommandHandler.java b/java/net/sf/l2j/gameserver/handler/AdminCommandHandler.java
-index 82c7c5c..5cfdac6 100644
---- a/java/net/sf/l2j/gameserver/handler/AdminCommandHandler.java
-+++ b/java/net/sf/l2j/gameserver/handler/AdminCommandHandler.java
+diff --git a/aCis_gameserver/java/net/sf/l2j/gameserver/handler/AdminCommandHandler.java b/aCis_gameserver/java/net/sf/l2j/gameserver/handler/AdminCommandHandler.java
+index 9ab431a..dcc00b6 100644
+--- a/aCis_gameserver/java/net/sf/l2j/gameserver/handler/AdminCommandHandler.java
++++ b/aCis_gameserver/java/net/sf/l2j/gameserver/handler/AdminCommandHandler.java
 @@ -1,5 +1,7 @@
  package net.sf.l2j.gameserver.handler;
  
@@ -31,7 +77,7 @@ index 82c7c5c..5cfdac6 100644
  import java.util.HashMap;
  import java.util.Map;
  
-@@ -107,6 +109,7 @@ protected AdminCommandHandler()
+@@ -103,6 +105,7 @@ protected AdminCommandHandler()
  		registerAdminCommandHandler(new AdminTarget());
  		registerAdminCommandHandler(new AdminTeleport());
  		registerAdminCommandHandler(new AdminZone());
@@ -39,10 +85,10 @@ index 82c7c5c..5cfdac6 100644
  	}
  	
  	public void registerAdminCommandHandler(IAdminCommandHandler handler)
-diff --git a/java/net/sf/l2j/gameserver/handler/chathandlers/ChatTell.java b/java/net/sf/l2j/gameserver/handler/chathandlers/ChatTell.java
-index 435a828..cdfc156 100644
---- a/java/net/sf/l2j/gameserver/handler/chathandlers/ChatTell.java
-+++ b/java/net/sf/l2j/gameserver/handler/chathandlers/ChatTell.java
+diff --git a/aCis_gameserver/java/net/sf/l2j/gameserver/handler/chathandlers/ChatTell.java b/aCis_gameserver/java/net/sf/l2j/gameserver/handler/chathandlers/ChatTell.java
+index ec1a8df..bd6823d 100644
+--- a/aCis_gameserver/java/net/sf/l2j/gameserver/handler/chathandlers/ChatTell.java
++++ b/aCis_gameserver/java/net/sf/l2j/gameserver/handler/chathandlers/ChatTell.java
 @@ -1,5 +1,7 @@
  package net.sf.l2j.gameserver.handler.chathandlers;
  
@@ -55,15 +101,15 @@ index 435a828..cdfc156 100644
  			return;
  		
  		final Player receiver = World.getInstance().getPlayer(target);
--		if (receiver == null || (receiver.getClient() != null && receiver.getClient().isDetached()))
-+		if (receiver == null || (receiver.getClient() != null && receiver.getClient().isDetached() && !(receiver instanceof FakePlayer)))
+-		if (receiver == null || receiver.getClient().isDetached())
++		if (receiver == null || receiver.getClient().isDetached() && !(receiver instanceof FakePlayer))
  		{
  			activeChar.sendPacket(SystemMessageId.TARGET_IS_NOT_FOUND_IN_THE_GAME);
  			return;
-diff --git a/java/net/sf/l2j/gameserver/model/actor/instance/Player.java b/java/net/sf/l2j/gameserver/model/actor/instance/Player.java
-index 87ceb15..1417bbb 100644
---- a/java/net/sf/l2j/gameserver/model/actor/instance/Player.java
-+++ b/java/net/sf/l2j/gameserver/model/actor/instance/Player.java
+diff --git a/aCis_gameserver/java/net/sf/l2j/gameserver/model/actor/instance/Player.java b/aCis_gameserver/java/net/sf/l2j/gameserver/model/actor/instance/Player.java
+index a1872b7..331fba0 100644
+--- a/aCis_gameserver/java/net/sf/l2j/gameserver/model/actor/instance/Player.java
++++ b/aCis_gameserver/java/net/sf/l2j/gameserver/model/actor/instance/Player.java
 @@ -1,5 +1,7 @@
  package net.sf.l2j.gameserver.model.actor.instance;
  
@@ -72,7 +118,7 @@ index 87ceb15..1417bbb 100644
  import java.sql.Connection;
  import java.sql.PreparedStatement;
  import java.sql.ResultSet;
-@@ -248,8 +250,22 @@
+@@ -244,8 +246,22 @@
   * This class represents a player in the world.<br>
   * There is always a client-thread connected to this (except if a player-store is activated upon logout).
   */
@@ -96,57 +142,56 @@ index 87ceb15..1417bbb 100644
  	public enum StoreType
  	{
  		NONE(0),
-diff --git a/java/net/sf/l2j/gameserver/network/clientpackets/MoveBackwardToLocation.java b/java/net/sf/l2j/gameserver/network/clientpackets/MoveBackwardToLocation.java
-index 046b015..3a5f44a 100644
---- a/java/net/sf/l2j/gameserver/network/clientpackets/MoveBackwardToLocation.java
-+++ b/java/net/sf/l2j/gameserver/network/clientpackets/MoveBackwardToLocation.java
+@@ -590,7 +606,7 @@ public String string()
+ 	 * @param accountName The name of the account including this Player
+ 	 * @param app The PcAppearance of the Player
+ 	 */
+-	private Player(int objectId, PlayerTemplate template, String accountName, PcAppearance app)
++	protected Player(int objectId, PlayerTemplate template, String accountName, PcAppearance app)
+ 	{
+ 		super(objectId, template);
+ 		
+@@ -611,7 +627,7 @@ private Player(int objectId, PlayerTemplate template, String accountName, PcAppe
+ 		getFreight();
+ 	}
+ 	
+-	private Player(int objectId)
++	protected Player(int objectId)
+ 	{
+ 		super(objectId, null);
+ 		
+@@ -10001,7 +10017,7 @@ private void restoreFriendList()
+ 		}
+ 	}
+ 	
+-	private void notifyFriends(boolean login)
++	protected void notifyFriends(boolean login)
+ 	{
+ 		for (int id : _friendList)
+ 		{
+diff --git a/aCis_gameserver/java/net/sf/l2j/gameserver/network/clientpackets/MoveBackwardToLocation.java b/aCis_gameserver/java/net/sf/l2j/gameserver/network/clientpackets/MoveBackwardToLocation.java
+index d0e4ef3..1f82e68 100644
+--- a/aCis_gameserver/java/net/sf/l2j/gameserver/network/clientpackets/MoveBackwardToLocation.java
++++ b/aCis_gameserver/java/net/sf/l2j/gameserver/network/clientpackets/MoveBackwardToLocation.java
 @@ -1,5 +1,7 @@
-  package net.sf.l2j.gameserver.network.clientpackets;
+ package net.sf.l2j.gameserver.network.clientpackets;
  
 +import com.elfocrash.roboto.FakePlayer;
 +
  import java.nio.BufferUnderflowException;
  
  import net.sf.l2j.Config;
-@@ -86,6 +88,13 @@ protected void runImpl()
- 			activeChar.teleToLocation(_targetX, _targetY, _targetZ, 0);
+@@ -87,6 +89,13 @@ protected void runImpl()
  			return;
  		}
-+		
+ 		
 +		if(activeChar.isControllingFakePlayer()) {
 +			FakePlayer fakePlayer = activeChar.getPlayerUnderControl();
 +			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 +			fakePlayer.getAI().setIntention(CtrlIntention.MOVE_TO, new Location(_targetX, _targetY, _targetZ));
 +			return;
-+		}		
- 				
++		}	
++		
  		double dx = _targetX - _originX;
  		double dy = _targetY - _originY;
  		
- 		diff --git a/data/html/admin/fakeplayers/index.htm b/data/html/admin/fakeplayers/index.htm
-new file mode 100644
-index 0000000..841e9f6
---- /dev/null
-+++ b/data/html/admin/fakeplayers/index.htm
-@@ -0,0 +1,20 @@
-+<html><body>
-+<table width=260>
-+<tr>
-+<td width=40></td>	
-+<td width=180><center>Fake Players Dashboard</center></td>
-+<td width=40></td>
-+</tr>
-+<tr>
-+<td width=180><center>Fake player count: <font color="LEVEL">%fakecount%</font></center></td>
-+</tr>
-+<tr>
-+<td width=180><center>AI Tasks running: <font color="LEVEL">%taskcount%</font></center></td>
-+</tr>
-+</table><br>
-+<center>
-+<table width=230>
-+<tr><td><a action="bypass admin_spawnrandom htm"><font color="LEVEL">Spawn fake</font></a></td></tr>
-+</table>
-+</center>
-+</body></html>
-\ No newline at end of file

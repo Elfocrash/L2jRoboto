@@ -27,17 +27,11 @@ import com.elfocrash.roboto.ai.AdventurerAI;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.commons.random.Rnd;
-import net.sf.l2j.gameserver.datatables.CharTemplateTable;
-import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportType;
-import net.sf.l2j.gameserver.datatables.PlayerNameTable;
-import net.sf.l2j.gameserver.datatables.SkillTable.FrequentSkill;
+import net.sf.l2j.gameserver.data.sql.PlayerInfoTable;
+import net.sf.l2j.gameserver.data.xml.MapRegionData.TeleportType;
+import net.sf.l2j.gameserver.data.xml.PlayerData;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
-import net.sf.l2j.gameserver.instancemanager.DimensionalRiftManager;
-import net.sf.l2j.gameserver.instancemanager.SevenSigns;
-import net.sf.l2j.gameserver.instancemanager.SevenSigns.CabalType;
-import net.sf.l2j.gameserver.instancemanager.SevenSigns.SealType;
-import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.appearance.PcAppearance;
@@ -52,7 +46,7 @@ import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.entity.Siege;
 import net.sf.l2j.gameserver.model.entity.Siege.SiegeSide;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
-import net.sf.l2j.gameserver.model.olympiad.Olympiad;
+import net.sf.l2j.gameserver.model.pledge.Clan;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.PledgeShowMemberListUpdate;
@@ -85,18 +79,13 @@ public enum FakePlayerManager {
 		FakePlayer activeChar = createRandomFakePlayer();
 		World.getInstance().addPlayer(activeChar);
 		handlePlayerClanOnSpawn(activeChar);
-		handlePlayerSevenSignsOnSpawn(activeChar);
+		
 		if (Config.PLAYER_SPAWN_PROTECTION > 0)
 			activeChar.setSpawnProtection(true);
+		
 		activeChar.spawnMe(x, y, z);
 		activeChar.onPlayerEnter();
-		if (Olympiad.getInstance().playerInStadia(activeChar))
-			activeChar.teleToLocation(TeleportType.TOWN);
-
-		if (DimensionalRiftManager.getInstance().checkIfInRiftZone(activeChar.getX(), activeChar.getY(),
-				activeChar.getZ(), false))
-			DimensionalRiftManager.getInstance().teleportToWaitingRoom(activeChar);
-
+		
 		if (!activeChar.isGM() && (!activeChar.isInSiege() || activeChar.getSiegeState() < 2)
 				&& activeChar.isInsideZone(ZoneId.SIEGE))
 			activeChar.teleToLocation(TeleportType.TOWN);
@@ -113,24 +102,8 @@ public enum FakePlayerManager {
 		}
 	}
 
-	private static void handlePlayerSevenSignsOnSpawn(FakePlayer activeChar) {
-		if (SevenSigns.getInstance().isSealValidationPeriod()
-				&& SevenSigns.getInstance().getSealOwner(SealType.STRIFE) != CabalType.NORMAL) {
-			CabalType cabal = SevenSigns.getInstance().getPlayerCabal(activeChar.getObjectId());
-			if (cabal != CabalType.NORMAL) {
-				if (cabal == SevenSigns.getInstance().getSealOwner(SealType.STRIFE))
-					activeChar.addSkill(FrequentSkill.THE_VICTOR_OF_WAR.getSkill());
-				else
-					activeChar.addSkill(FrequentSkill.THE_VANQUISHED_OF_WAR.getSkill());
-			}
-		} else {
-			activeChar.removeSkill(FrequentSkill.THE_VICTOR_OF_WAR.getSkill());
-			activeChar.removeSkill(FrequentSkill.THE_VANQUISHED_OF_WAR.getSkill());
-		}
-	}
-
 	private static void handlePlayerClanOnSpawn(FakePlayer activeChar) {
-		final L2Clan clan = activeChar.getClan();
+		final Clan clan = activeChar.getClan();
 		if (clan != null) {
 			clan.getClanMember(activeChar.getObjectId()).setPlayerInstance(activeChar);
 
@@ -169,16 +142,16 @@ public enum FakePlayerManager {
 
 		ClassId classId = getThirdClasses().get(Rnd.get(0, getThirdClasses().size() - 1));
 
-		final PlayerTemplate template = CharTemplateTable.getInstance().getTemplate(classId);
+		final PlayerTemplate template = PlayerData.getInstance().getTemplate(classId);
 		PcAppearance app = getRandomAppearance(template.getRace());
 		FakePlayer player = new FakePlayer(objectId, template, accountName, app);
 
 		player.setName(playerName);
-
-		PlayerNameTable.getInstance().addPlayer(objectId, accountName, playerName, player.getAccessLevel().getLevel());
+		player.setAccessLevel(Config.DEFAULT_ACCESS_LEVEL);
+		PlayerInfoTable.getInstance().addPlayer(objectId, accountName, playerName, player.getAccessLevel().getLevel());
 		player.setBaseClass(player.getClassId());
 		setLevel(player, 81);
-		player.giveAvailableSkills();
+		player.rewardSkills();
 
 		giveArmorsByClass(player);
 		giveWeaponsByClass(player,true);

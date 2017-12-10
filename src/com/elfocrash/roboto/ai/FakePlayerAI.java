@@ -6,19 +6,20 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.elfocrash.roboto.FakePlayer;
+
 import net.sf.l2j.commons.random.Rnd;
-import net.sf.l2j.gameserver.datatables.SkillTable;
+import net.sf.l2j.gameserver.data.SkillTable;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.L2Skill.SkillTargetType;
-import net.sf.l2j.gameserver.model.Location;
-import net.sf.l2j.gameserver.model.SpawnLocation;
 import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.instance.Door;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
+import net.sf.l2j.gameserver.model.location.Location;
+import net.sf.l2j.gameserver.model.location.SpawnLocation;
 import net.sf.l2j.gameserver.network.serverpackets.MoveToLocation;
 import net.sf.l2j.gameserver.network.serverpackets.MoveToPawn;
 import net.sf.l2j.gameserver.network.serverpackets.StopMove;

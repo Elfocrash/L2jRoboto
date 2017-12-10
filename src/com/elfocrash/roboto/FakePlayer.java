@@ -4,19 +4,17 @@ import java.util.logging.Level;
 
 import com.elfocrash.roboto.ai.FakePlayerAI;
 
-import net.sf.l2j.gameserver.datatables.GmListTable;
-import net.sf.l2j.gameserver.datatables.SkillTable;
+import net.sf.l2j.gameserver.data.SkillTable.FrequentSkill;
+import net.sf.l2j.gameserver.data.manager.CursedWeaponManager;
+import net.sf.l2j.gameserver.data.xml.AdminData;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
-import net.sf.l2j.gameserver.instancemanager.CursedWeaponsManager;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns.CabalType;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns.SealType;
-import net.sf.l2j.gameserver.model.L2ClanMember;
 import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.L2Skill.SkillTargetType;
-import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Attackable;
@@ -32,7 +30,9 @@ import net.sf.l2j.gameserver.model.actor.template.PlayerTemplate;
 import net.sf.l2j.gameserver.model.entity.Siege;
 import net.sf.l2j.gameserver.model.entity.Siege.SiegeSide;
 import net.sf.l2j.gameserver.model.group.Party.MessageType;
+import net.sf.l2j.gameserver.model.location.Location;
 import net.sf.l2j.gameserver.model.olympiad.OlympiadManager;
+import net.sf.l2j.gameserver.model.pledge.ClanMember;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
@@ -222,7 +222,7 @@ public class FakePlayer extends Player
 		// Siege summon checks. Both checks send a message to the player if it return false.
 		if (skill.isSiegeSummonSkill())
 		{
-			final Siege siege = CastleManager.getInstance().getSiege(this);
+			final Siege siege = CastleManager.getInstance().getActiveSiege(this);
 			if (siege == null || !siege.checkSide(getClan(), SiegeSide.ATTACKER) || (isInSiege() && isInsideZone(ZoneId.CASTLE)))
 			{
 				sendPacket(SystemMessage.getSystemMessage(SystemMessageId.NOT_CALL_PET_FROM_THIS_LOCATION));
@@ -512,7 +512,7 @@ public class FakePlayer extends Player
 			removeMeFromPartyMatch();
 			
 			if (isFlying())
-				removeSkill(SkillTable.getInstance().getInfo(4289, 1));
+				removeSkill(FrequentSkill.WYVERN_BREATH.getSkill().getId(), false);
 			
 			// Stop all scheduled tasks
 			stopAllTimers();
@@ -560,7 +560,7 @@ public class FakePlayer extends Player
 			// set the status for pledge member list to OFFLINE
 			if (getClan() != null)
 			{
-				L2ClanMember clanMember = getClan().getClanMember(getObjectId());
+				ClanMember clanMember = getClan().getClanMember(getObjectId());
 				if (clanMember != null)
 					clanMember.setPlayerInstance(null);
 			}
@@ -574,7 +574,7 @@ public class FakePlayer extends Player
 			
 			// If the Player is a GM, remove it from the GM List
 			if (isGM())
-				GmListTable.getInstance().deleteGm(this);
+				AdminData.getInstance().deleteGm(this);
 			
 			// Check if the Player is in observer mode to set its position to its position before entering in observer mode
 			if (isInObserverMode())
@@ -595,7 +595,7 @@ public class FakePlayer extends Player
 			clearDepositedFreight();
 			
 			if (isCursedWeaponEquipped())
-				CursedWeaponsManager.getInstance().getCursedWeapon(getCursedWeaponEquippedId()).setPlayer(null);
+				CursedWeaponManager.getInstance().getCursedWeapon(getCursedWeaponEquippedId()).setPlayer(null);
 			
 			if (getClanId() > 0)
 				getClan().broadcastToOtherOnlineMembers(new PledgeShowMemberListUpdate(this), this);
@@ -609,11 +609,13 @@ public class FakePlayer extends Player
 			
 			World.getInstance().removePlayer(this); // force remove in case of crash during teleport
 			
+			// friends & blocklist update
+			notifyFriends(false);
 			getBlockList().playerLogout();
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.WARNING, "Exception on despawnPlayer()" + e.getMessage(), e);
+			_log.log(Level.WARNING, "Exception on deleteMe()" + e.getMessage(), e);
 		}
 	}
 

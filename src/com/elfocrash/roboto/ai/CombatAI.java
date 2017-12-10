@@ -10,13 +10,12 @@ import com.elfocrash.roboto.model.HealingSpell;
 import com.elfocrash.roboto.model.OffensiveSpell;
 import com.elfocrash.roboto.model.SupportSpell;
 
-import net.sf.l2j.gameserver.datatables.SkillTable;
+import net.sf.l2j.gameserver.data.SkillTable;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.ShotType;
 import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
-import net.sf.l2j.gameserver.network.serverpackets.ExAutoSoulShot;
 
 public abstract class CombatAI extends FakePlayerAI {
 	
@@ -97,10 +96,7 @@ public abstract class CombatAI extends FakePlayerAI {
 		
 		if(_fakePlayer.getAutoSoulShot().isEmpty()) {
 			_fakePlayer.addAutoSoulShot(getShotId());
-			_fakePlayer.sendPacket(new ExAutoSoulShot(getShotId(), 1));
-			
-			if (_fakePlayer.getActiveWeaponItem() != _fakePlayer.getFistsWeaponItem() /*&& item.getItem().getCrystalType() == _fakePlayer.getActiveWeaponItem().getCrystalType()*/)
-				_fakePlayer.rechargeShots(true, true);
+			_fakePlayer.rechargeShots(true, true);
 		}	
 	}
 	
