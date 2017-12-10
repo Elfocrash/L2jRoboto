@@ -24,7 +24,7 @@ import net.sf.l2j.gameserver.network.serverpackets.MoveToLocation;
 import net.sf.l2j.gameserver.network.serverpackets.MoveToPawn;
 import net.sf.l2j.gameserver.network.serverpackets.StopMove;
 import net.sf.l2j.gameserver.network.serverpackets.StopRotation;
-import net.sf.l2j.gameserver.templates.skills.L2SkillType;
+import net.sf.l2j.gameserver.templates.skills.L2EffectType;
 
 /**
  * @author Elfocrash
@@ -54,7 +54,7 @@ public abstract class FakePlayerAI
 		for(int[] buff : getBuffs()){
 			try {
 				Map<Integer, L2Effect> activeEffects = Arrays.stream(_fakePlayer.getAllEffects())
-					.filter(x-> x.getSkillType() == L2SkillType.BUFF)
+						.filter(x->x.getEffectType() == L2EffectType.BUFF)
 					.collect(Collectors.toMap(x-> x.getSkill().getId(), x->x));
 			
 			if(!activeEffects.containsKey(buff[0]))

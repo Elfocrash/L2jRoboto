@@ -68,7 +68,7 @@ public enum FakePlayerManager {
 	}
 
 	public int getTestTargetRange() {
-		return 1200;
+		return 2000;
 	}
 
 	public void initialise() {

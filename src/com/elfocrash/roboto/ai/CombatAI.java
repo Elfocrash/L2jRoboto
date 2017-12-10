@@ -122,7 +122,7 @@ public abstract class CombatAI extends FakePlayerAI {
 	}
 
 	private BotSkill waitAndPickAvailablePrioritisedSpell(List<? extends BotSkill> spellsOrdered, int skillListSize) {
-		int skillIndex = 0;		
+		int skillIndex = 0;	
 		BotSkill botSkill = spellsOrdered.get(skillIndex);
 		_fakePlayer.getCurrentSkill().setCtrlPressed(!_fakePlayer.getTarget().isInsideZone(ZoneId.PEACE));
 		L2Skill skill = _fakePlayer.getSkill(botSkill.getSkillId());
@@ -136,28 +136,22 @@ public abstract class CombatAI extends FakePlayerAI {
 			}
 		}
 		
-		while(!_fakePlayer.checkUseMagicConditions(skill,true,false)) {
-			
+		while(!_fakePlayer.checkUseMagicConditions(skill,true,false)) {			
 			_isBusyThinking = true;
 			if(_fakePlayer.isDead() || _fakePlayer.isOutOfControl()) {
-				_isBusyThinking = false;
 				return null;
 			}
 			if((skillIndex < 0) || (skillIndex >= skillListSize)) {
-				skillIndex = 0;				
+				return null;
 			}
 			skill = _fakePlayer.getSkill(spellsOrdered.get(skillIndex).getSkillId());
 			botSkill = spellsOrdered.get(skillIndex);
 			skillIndex++;			
 		}
-		
-		_isBusyThinking = false;
 		return botSkill;
 	}
 	
 	protected L2Skill getRandomAvaiableFighterSpellForTarget() {	
-		int maxRetries = 1;
-		int retries = 0;
 		List<OffensiveSpell> spellsOrdered = getOffensiveSpells().stream().sorted((o1, o2)-> Integer.compare(o1.getPriority(), o2.getPriority())).collect(Collectors.toList());
 		int skillIndex = 0;
 		int skillListSize = spellsOrdered.size();
@@ -165,20 +159,18 @@ public abstract class CombatAI extends FakePlayerAI {
 		L2Skill skill = _fakePlayer.getSkill(spellsOrdered.get(skillIndex).getSkillId());
 		
 		_fakePlayer.getCurrentSkill().setCtrlPressed(!_fakePlayer.getTarget().isInsideZone(ZoneId.PEACE));		
-		while(!_fakePlayer.checkUseMagicConditions(skill,true,false) && retries <= maxRetries) {
+		while(!_fakePlayer.checkUseMagicConditions(skill,true,false)) {
 			if((skillIndex < 0) || (skillIndex >= skillListSize)) {
-				skillIndex = 0;				
+				return null;	
 			}
 			skill = _fakePlayer.getSkill(spellsOrdered.get(skillIndex).getSkillId());
-			retries++;
 			skillIndex++;
 		}
 		
 		if(!_fakePlayer.checkUseMagicConditions(skill,true,false)) {
 			_fakePlayer.forceAutoAttack((Creature)_fakePlayer.getTarget());
 			return null;
-		}
-			
+		}			
 
 		return skill;
 	}

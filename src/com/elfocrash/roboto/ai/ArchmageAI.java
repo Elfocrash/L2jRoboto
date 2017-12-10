@@ -30,8 +30,8 @@ public class ArchmageAI extends CombatAI
 			return;
 		}
 		
-		setBusyThinking(true);
-		applyDefaultBuffs();
+		setBusyThinking(true);		
+		applyDefaultBuffs();		
 		handleShots();		
 		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());		
 		tryAttackingUsingMageOffensiveSkill();

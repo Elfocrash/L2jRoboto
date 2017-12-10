@@ -28,7 +28,7 @@ public class AdventurerAI extends CombatAI
 	{
 		if(_fakePlayer.isDead()) {
 			return;
-		}
+		}		
 		
 		setBusyThinking(true);		
 		applyDefaultBuffs();
