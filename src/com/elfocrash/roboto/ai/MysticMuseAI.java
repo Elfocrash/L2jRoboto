@@ -26,9 +26,8 @@ public class MysticMuseAI extends CombatAI
 	@Override
 	public void thinkAndAct()
 	{
-		if(_fakePlayer.isDead()) {
+		if(_fakePlayer.isDead())
 			return;
-		}
 		
 		setBusyThinking(true);
 		applyDefaultBuffs();

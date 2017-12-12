@@ -28,9 +28,8 @@ public class CardinalAI extends CombatAI implements IHealer
 	@Override
 	public void thinkAndAct()
 	{
-		if(_fakePlayer.isDead()) {
+		if(_fakePlayer.isDead())
 			return;
-		}
 		
 		setBusyThinking(true);
 		applyDefaultBuffs();

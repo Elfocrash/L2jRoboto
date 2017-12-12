@@ -27,9 +27,8 @@ public class TitanAI extends CombatAI
 	@Override
 	public void thinkAndAct()
 	{
-		if(_fakePlayer.isDead()) {
+		if(_fakePlayer.isDead())
 			return;
-		}
 		
 		setBusyThinking(true);
 		applyDefaultBuffs();
@@ -38,6 +37,11 @@ public class TitanAI extends CombatAI
 		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());		
 		tryAttackingUsingFighterOffensiveSkill();
 		setBusyThinking(false);
+	}
+	
+	@Override
+	protected double changeOfUsingSkill() {
+		return 0.10;
 	}
 	
 	@Override

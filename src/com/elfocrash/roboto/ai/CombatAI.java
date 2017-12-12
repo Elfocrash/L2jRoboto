@@ -10,6 +10,7 @@ import com.elfocrash.roboto.model.HealingSpell;
 import com.elfocrash.roboto.model.OffensiveSpell;
 import com.elfocrash.roboto.model.SupportSpell;
 
+import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.gameserver.data.SkillTable;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.model.L2Skill;
@@ -37,15 +38,17 @@ public abstract class CombatAI extends FakePlayerAI {
 	}
 	
 	protected void tryAttackingUsingFighterOffensiveSkill()	{
-		if(_fakePlayer.getTarget() != null && _fakePlayer.getTarget() instanceof Creature) {			
-			_fakePlayer.forceAutoAttack((Creature)_fakePlayer.getTarget());
-			if(getOffensiveSpells() != null && !getOffensiveSpells().isEmpty()) {
-				L2Skill skill = getRandomAvaiableFighterSpellForTarget();			
-				if(skill != null) {
-					castSpell(skill);
-				}
-			}	
-			//_fakePlayer.forceAutoAttack((Creature)_fakePlayer.getTarget());
+		if(_fakePlayer.getTarget() != null && _fakePlayer.getTarget() instanceof Creature) {		
+			if(Rnd.nextDouble() < changeOfUsingSkill()) {			
+				if(getOffensiveSpells() != null && !getOffensiveSpells().isEmpty()) {
+					L2Skill skill = getRandomAvaiableFighterSpellForTarget();			
+					if(skill != null) {
+						castSpell(skill);
+					}
+				}	
+			}else {
+				_fakePlayer.forceAutoAttack((Creature)_fakePlayer.getTarget());
+			}
 		}
 	}
 	
@@ -213,6 +216,10 @@ public abstract class CombatAI extends FakePlayerAI {
 		return _fakePlayer.getMaxCp() - _fakePlayer.getCurrentCp();
 	}
 
+	protected double changeOfUsingSkill() {
+		return 1.0;
+	}
+	
 	protected abstract ShotType getShotType();
 	protected abstract List<OffensiveSpell> getOffensiveSpells();
 	protected abstract List<HealingSpell> getHealingSpells();

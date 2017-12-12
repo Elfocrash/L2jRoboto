@@ -29,9 +29,8 @@ public class SoultakerAI extends CombatAI implements IConsumableSpender
 	@Override
 	public void thinkAndAct()
 	{
-		if(_fakePlayer.isDead()) {
+		if(_fakePlayer.isDead())
 			return;
-		}
 		
 		setBusyThinking(true);
 		applyDefaultBuffs();

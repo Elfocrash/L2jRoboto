@@ -31,6 +31,9 @@ public class EnchanterAI extends FakePlayerAI {
 	@Override
 	public void thinkAndAct() {		
 		
+		if(_fakePlayer.isDead())
+			return;
+		
 		setBusyThinking(true);
 		if(_enchantIterations % iterationsForAction == 0) {	
 			ItemInstance weapon = _fakePlayer.getActiveWeaponInstance();		

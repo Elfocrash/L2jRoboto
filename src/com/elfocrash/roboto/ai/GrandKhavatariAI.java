@@ -22,9 +22,8 @@ public class GrandKhavatariAI extends CombatAI
 	@Override
 	public void thinkAndAct()
 	{
-		if(_fakePlayer.isDead()) {
+		if(_fakePlayer.isDead())
 			return;
-		}
 		
 		setBusyThinking(true);
 		applyDefaultBuffs();
@@ -32,6 +31,11 @@ public class GrandKhavatariAI extends CombatAI
 		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());		
 		tryAttackingUsingFighterOffensiveSkill();
 		setBusyThinking(false);
+	}
+	
+	@Override
+	protected double changeOfUsingSkill() {
+		return 0.5;
 	}
 	
 	@Override

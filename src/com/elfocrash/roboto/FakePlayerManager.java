@@ -381,32 +381,51 @@ public enum FakePlayerManager {
 	}
 
 	public int[][] getFighterBuffs() {
-		return new int[][] { { 1204, 2 }, // wind walk
-				{ 264, 1 }, // song of earth
-				{ 1068, 3 }, // might
-				{ 1062, 2 }, // besekers
-				{ 1086, 2 }, // haste
-				{ 1388, 3 }, // Greater Might
-				{ 1036, 2 }, // magic barrier
-				{ 274, 1 }, // dance of fire
-				{ 273, 1 }, // dance of fury
-				{ 268, 1 }, // dance of wind
-				{ 1040, 3 } // shield
+		return new int[][] { { 1204, 2 }, // wind walk	                
+            { 1040, 3 }, // shield
+			{ 1035, 4 }, // Mental Shield
+			{ 1045, 6 }, // Bless the Body				
+			{ 1068, 3 }, // might
+			{ 1062, 2 }, // besekers
+			{ 1086, 2 }, // haste
+			{ 1077, 3 }, // focus
+			{ 1388, 3 }, // Greater Might
+			{ 1036, 2 }, // magic barrier
+			{ 274, 1 }, // dance of fire
+			{ 273, 1 }, // dance of fury
+			{ 268, 1 }, // dance of wind
+			{ 271, 1 }, // dance of warrior
+			{ 267, 1 }, // Song of Warding
+			{ 349, 1 }, // Song of Renewal
+			{ 264, 1 }, // song of earth
+			{ 269, 1 }, // song of hunter
+			{ 364, 1 }, // song of champion
+			{ 1363, 1 }, // chant of victory
+			{ 4699, 5 } // Blessing of Queen
 		};
 	}
 
 	public int[][] getMageBuffs() {
-		return new int[][] { { 1204, 2 }, // wind walk
-				{ 264, 1 }, // song of earth
-				{ 1085, 3 }, // acumen
-				{ 1062, 2 }, // besekers
-				{ 1059, 3 }, // empower
-				{ 1389, 3 }, // Greater Shield
-				{ 1036, 2 }, // magic barrier
-				{ 273, 1 }, // dance of the mystic
-				{ 276, 1 }, // dance of concentration
-				{ 268, 1 }, // song of wind
-				{ 1040, 3 } // shield
+		return new int[][] { { 1204, 2 }, // wind walk	
+            { 1040, 3 }, // shield
+			{ 1035, 4 }, // Mental Shield
+			{ 4351, 6 }, // Concentration
+			{ 1036, 2 }, // Magic Barrier
+			{ 1045, 6 }, // Bless the Body
+			{ 1303, 2 }, // Wild Magic
+			{ 1085, 3 }, // acumen
+			{ 1062, 2 }, // besekers
+			{ 1059, 3 }, // empower
+			{ 1389, 3 }, // Greater Shield
+			{ 273, 1 }, // dance of the mystic
+			{ 276, 1 }, // dance of concentration
+			{ 365, 1 }, // Dance of Siren
+			{ 264, 1 }, // song of earth
+			{ 268, 1 }, // song of wind
+			{ 267, 1 }, // Song of Warding
+			{ 349, 1 }, // Song of Renewal
+			{ 1413, 1 }, // Magnus\' Chant
+			{ 4703, 4 } // Gift of Seraphim
 		};
 	}
 }

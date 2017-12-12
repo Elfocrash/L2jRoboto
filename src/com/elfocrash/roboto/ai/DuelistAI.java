@@ -21,9 +21,8 @@ public class DuelistAI extends CombatAI implements IConsumableSpender {
 
 	@Override
 	public void thinkAndAct() {
-		if(_fakePlayer.isDead()) {
+		if(_fakePlayer.isDead())
 			return;
-		}
 		
 		setBusyThinking(true);
 		applyDefaultBuffs();
@@ -37,6 +36,11 @@ public class DuelistAI extends CombatAI implements IConsumableSpender {
 	@Override
 	protected ShotType getShotType() {
 		return ShotType.SOULSHOT;
+	}	
+	
+	@Override
+	protected double changeOfUsingSkill() {
+		return 0.5;
 	}
 
 	@Override

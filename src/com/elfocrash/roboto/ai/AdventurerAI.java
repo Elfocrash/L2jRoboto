@@ -26,9 +26,8 @@ public class AdventurerAI extends CombatAI
 	@Override
 	public void thinkAndAct()
 	{
-		if(_fakePlayer.isDead()) {
+		if(_fakePlayer.isDead())
 			return;
-		}		
 		
 		setBusyThinking(true);		
 		applyDefaultBuffs();
@@ -37,7 +36,7 @@ public class AdventurerAI extends CombatAI
 		tryAttackingUsingFighterOffensiveSkill();
 		setBusyThinking(false);
 	}
-	
+		
 	@Override
 	protected ShotType getShotType()
 	{

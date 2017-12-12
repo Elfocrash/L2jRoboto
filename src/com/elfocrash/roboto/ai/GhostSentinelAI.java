@@ -28,9 +28,8 @@ public class GhostSentinelAI extends CombatAI implements IConsumableSpender
 	@Override
 	public void thinkAndAct()
 	{
-		if(_fakePlayer.isDead()) {
+		if(_fakePlayer.isDead())
 			return;
-		}
 		
 		setBusyThinking(true);
 		applyDefaultBuffs();
@@ -40,6 +39,11 @@ public class GhostSentinelAI extends CombatAI implements IConsumableSpender
 		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());		
 		tryAttackingUsingFighterOffensiveSkill();
 		setBusyThinking(false);
+	}
+	
+	@Override
+	protected double changeOfUsingSkill() {
+		return 0.15;
 	}
 	
 	@Override
