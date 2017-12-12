@@ -24,11 +24,8 @@ public class DominatorAI extends CombatAI
 	}
 	
 	@Override
-	public void thinkAndAct()
-	{
-		if(_fakePlayer.isDead())
-			return;
-		
+	public void thinkAndAct() {
+		super.thinkAndAct();
 		setBusyThinking(true);
 		applyDefaultBuffs();		
 		handleShots();		

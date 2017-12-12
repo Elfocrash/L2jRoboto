@@ -15,6 +15,7 @@ import com.elfocrash.roboto.ai.FallbackAI;
 import com.elfocrash.roboto.ai.SaggitariusAI;
 import com.elfocrash.roboto.ai.SoultakerAI;
 import com.elfocrash.roboto.ai.DominatorAI;
+import com.elfocrash.roboto.ai.DreadnoughtAI;
 import com.elfocrash.roboto.ai.DuelistAI;
 import com.elfocrash.roboto.ai.GhostSentinelAI;
 import com.elfocrash.roboto.ai.GrandKhavatariAI;
@@ -286,7 +287,7 @@ public enum FakePlayerManager {
 		 * classes.add(ClassId.EVAS_SAINT); classes.add(ClassId.SHILLIEN_TEMPLAR);
 		 * classes.add(ClassId.SPECTRAL_DANCER); classes.add(ClassId.GHOST_HUNTER);
 		 * 
-		 * classes.add(ClassId.DREADNOUGHT); classes.add(ClassId.PHOENIX_KNIGHT);
+		 * classes.add(ClassId.PHOENIX_KNIGHT);
 		 * classes.add(ClassId.HELL_KNIGHT);
 		 * 
 		 * classes.add(ClassId.HIEROPHANT); classes.add(ClassId.EVAS_TEMPLAR);
@@ -314,9 +315,9 @@ public enum FakePlayerManager {
 		classes.add(ClassId.TITAN);
 		classes.add(ClassId.CARDINAL);
 		classes.add(ClassId.DUELIST);
-
 		classes.add(ClassId.GRAND_KHAVATARI);
-
+		classes.add(ClassId.DREADNOUGHT);
+		
 		return classes;
 	}
 
@@ -336,8 +337,8 @@ public enum FakePlayerManager {
 		ais.put(ClassId.TITAN, TitanAI.class);
 		ais.put(ClassId.CARDINAL, CardinalAI.class);
 		ais.put(ClassId.DUELIST, DuelistAI.class);
-
 		ais.put(ClassId.GRAND_KHAVATARI, GrandKhavatariAI.class);
+		ais.put(ClassId.DREADNOUGHT, DreadnoughtAI.class);
 		return ais;
 	}
 

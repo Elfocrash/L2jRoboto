@@ -28,9 +28,7 @@ public class MoonlightSentinelAI extends CombatAI implements IConsumableSpender
 	@Override
 	public void thinkAndAct()
 	{
-		if(_fakePlayer.isDead())
-			return;
-		
+		super.thinkAndAct();
 		setBusyThinking(true);
 		applyDefaultBuffs();
 		handleConsumable(_fakePlayer, getArrowId());

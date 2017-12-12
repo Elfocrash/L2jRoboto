@@ -9,6 +9,8 @@ import com.elfocrash.roboto.FakePlayer;
 
 import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.gameserver.data.SkillTable;
+import net.sf.l2j.gameserver.data.xml.MapRegionData;
+import net.sf.l2j.gameserver.data.xml.MapRegionData.TeleportType;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.L2Skill;
@@ -24,6 +26,7 @@ import net.sf.l2j.gameserver.network.serverpackets.MoveToLocation;
 import net.sf.l2j.gameserver.network.serverpackets.MoveToPawn;
 import net.sf.l2j.gameserver.network.serverpackets.StopMove;
 import net.sf.l2j.gameserver.network.serverpackets.StopRotation;
+import net.sf.l2j.gameserver.network.serverpackets.TeleportToLocation;
 import net.sf.l2j.gameserver.templates.skills.L2EffectType;
 
 /**
@@ -38,6 +41,8 @@ public abstract class FakePlayerAI
 	private long _moveToPawnTimeout;
 	protected int _clientMovingToPawnOffset;	
 	protected boolean _isBusyThinking = false;
+	protected int iterationsOnDeath = 0;
+	private final int toVillageIterationsOnDeath = 10;
 	
 	public FakePlayerAI(FakePlayer character)
 	{
@@ -68,6 +73,18 @@ public abstract class FakePlayerAI
 				e.printStackTrace();
 			}
 		}
+	}	
+	
+	protected void handleDeath() {
+		if(_fakePlayer.isDead()) {
+			if(iterationsOnDeath >= toVillageIterationsOnDeath) {
+				toVillageOnDeath();
+			}
+			iterationsOnDeath++;
+			return;
+		}
+		
+		iterationsOnDeath = 0;		
 	}
 	
 	public void setBusyThinking(boolean thinking) {
@@ -76,6 +93,26 @@ public abstract class FakePlayerAI
 	
 	public boolean isBusyThinking() {
 		return _isBusyThinking;
+	}
+	
+	protected void teleportToLocation(int x, int y, int z, int randomOffset) {
+		_fakePlayer.stopMove(null);
+		_fakePlayer.abortAttack();
+		_fakePlayer.abortCast();		
+		_fakePlayer.setIsTeleporting(true);
+		_fakePlayer.setTarget(null);		
+		_fakePlayer.getAI().setIntention(CtrlIntention.ACTIVE);		
+		if (randomOffset > 0)
+		{
+			x += Rnd.get(-randomOffset, randomOffset);
+			y += Rnd.get(-randomOffset, randomOffset);
+		}		
+		z += 5;
+		_fakePlayer.broadcastPacket(new TeleportToLocation(_fakePlayer, x, y, z));
+		_fakePlayer.decayMe();		
+		_fakePlayer.setXYZ(x, y, z);
+		_fakePlayer.onTeleported();		
+		_fakePlayer.revalidateZone(true);
 	}
 	
 	protected void tryTargetRandomCreatureByTypeInRadius(Class<? extends Creature> creatureClass, int radius)
@@ -144,6 +181,15 @@ public abstract class FakePlayerAI
 			
 			_fakePlayer.doCast(skill);
 		}
+	}
+	
+	protected void toVillageOnDeath() {
+		Location location = MapRegionData.getInstance().getLocationToTeleport(_fakePlayer, TeleportType.TOWN);
+		
+		if (_fakePlayer.isDead())
+			_fakePlayer.doRevive();
+		
+		_fakePlayer.getFakeAi().teleportToLocation(location.getX(), location.getY(), location.getZ(), 20);
 	}
 	
 	protected void clientStopMoving(SpawnLocation loc)

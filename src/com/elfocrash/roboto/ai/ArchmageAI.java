@@ -26,9 +26,7 @@ public class ArchmageAI extends CombatAI
 	@Override
 	public void thinkAndAct()
 	{
-		if(_fakePlayer.isDead())
-			return;
-		
+		super.thinkAndAct();		
 		setBusyThinking(true);		
 		applyDefaultBuffs();		
 		handleShots();		

@@ -38,7 +38,8 @@ public abstract class CombatAI extends FakePlayerAI {
 	}
 	
 	protected void tryAttackingUsingFighterOffensiveSkill()	{
-		if(_fakePlayer.getTarget() != null && _fakePlayer.getTarget() instanceof Creature) {		
+		if(_fakePlayer.getTarget() != null && _fakePlayer.getTarget() instanceof Creature) {
+			_fakePlayer.forceAutoAttack((Creature)_fakePlayer.getTarget());
 			if(Rnd.nextDouble() < changeOfUsingSkill()) {			
 				if(getOffensiveSpells() != null && !getOffensiveSpells().isEmpty()) {
 					L2Skill skill = getRandomAvaiableFighterSpellForTarget();			
@@ -46,10 +47,13 @@ public abstract class CombatAI extends FakePlayerAI {
 						castSpell(skill);
 					}
 				}	
-			}else {
-				_fakePlayer.forceAutoAttack((Creature)_fakePlayer.getTarget());
 			}
 		}
+	}
+	
+	@Override
+	public void thinkAndAct() {
+		handleDeath();
 	}
 	
 	protected int getShotId() {
