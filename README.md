@@ -3,6 +3,10 @@
 L2jRoboto way to create fake players for l2j servers. It is currently coded for aCis (372) but it should be easy to adapt.
 It is in a WIP state so it is NOT recommended to use on a live server.
 
+## The end goal
+The ultimate goal is to give server administrations the ability to create fake player entities which act as close to real players as possible.
+L2jRoboto will provide out of the box as many appropriate AIs as possible for the admins to use, but developers can pick it up and implement their own behaviors by extending the `FakePlayerAI` class.
+
 ## Features
 - [x] Priority based offensive/defensive/healing/support spell picking
 - [x] Attack entity
@@ -18,7 +22,6 @@ It is in a WIP state so it is NOT recommended to use on a live server.
   * //spawnrandom - Spawns a random Class bot with default AI for this class
   * //deletefake - Deleted a bot from the game
   * //spawnenchanter - Spawns an enchanter bot
-
 
 ## Installation
 
