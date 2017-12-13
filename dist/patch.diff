@@ -41,6 +41,7 @@ index 0e4ee14..a9d9b2b 100644
 +	<aCar name="admin_spawnrandom" accessLevel="7"/>
 +	<aCar name="admin_deletefake" accessLevel="7"/>
 +	<aCar name="admin_spawnenchanter" accessLevel="7"/>
++	<aCar name="admin_spawnwalker" accessLevel="7"/>
 +	
  </list>
 \ No newline at end of file
