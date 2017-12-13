@@ -4,10 +4,12 @@ L2jRoboto way to create fake players for l2j servers. It is currently coded for 
 It is in a WIP state so it is NOT recommended to use on a live server.
 
 ## Features
-  * Priority based offensive/defensive/healing/support spell picking
-  * Attack entity
-  * Give appropriate armor/weapon for the specific class
-  * Automatic enchant using the server's chance
+- [x] Priority based offensive/defensive/healing/support spell picking
+- [x] Attack entity
+- [x] Give appropriate armor/weapon for the specific class
+- [x] Automatic enchant using the server's chance
+- [x] Take control of on of the fake players
+- [x] Teleport to village on death
   
 ## Admin commands
   * //fakes - Brings up the Dashboard
