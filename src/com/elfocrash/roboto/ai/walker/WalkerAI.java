@@ -32,9 +32,10 @@ public abstract class WalkerAI extends FakePlayerAI {
 	@Override
 	public void setup() {
 		super.setup();		
-		_walkNodes = new LinkedList<>(); 
+		_walkNodes = new LinkedList<>();
+		setWalkNodes();
 	}
-
+	
 	@Override
 	public void thinkAndAct() {
 		setBusyThinking(true);		
@@ -89,4 +90,5 @@ public abstract class WalkerAI extends FakePlayerAI {
 	}
 	
 	protected abstract WalkerType getWalkerType();
+	protected abstract void setWalkNodes();
 }
