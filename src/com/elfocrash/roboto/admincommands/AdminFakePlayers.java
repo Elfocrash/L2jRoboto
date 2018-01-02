@@ -90,7 +90,7 @@ public class AdminFakePlayers implements IAdminCommandHandler
 			}
 			return true;
 		}		
-		if (command.startsWith("admin_takecontrol"))
+		/*if (command.startsWith("admin_takecontrol"))
 		{
 			if(activeChar.getTarget() != null && activeChar.getTarget() instanceof FakePlayer) {
 				FakePlayer fakePlayer = (FakePlayer)activeChar.getTarget();
@@ -115,7 +115,7 @@ public class AdminFakePlayers implements IAdminCommandHandler
 			
 			activeChar.sendMessage("You are not controlling a Fake Player");
 			return true;
-		}
+		}*/
 		return true;
 	}
 }

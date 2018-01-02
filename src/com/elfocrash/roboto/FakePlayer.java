@@ -3,6 +3,7 @@ package com.elfocrash.roboto;
 import java.util.logging.Level;
 
 import com.elfocrash.roboto.ai.FakePlayerAI;
+import com.elfocrash.roboto.helpers.FakeHelpers;
 
 import net.sf.l2j.gameserver.data.SkillTable.FrequentSkill;
 import net.sf.l2j.gameserver.data.manager.CursedWeaponManager;
@@ -63,7 +64,7 @@ public class FakePlayer extends Player
 		super(objectId);
 	}
 	
-	protected FakePlayer(int objectId, PlayerTemplate template, String accountName, PcAppearance app)
+	public FakePlayer(int objectId, PlayerTemplate template, String accountName, PcAppearance app)
 	{
 		super(objectId, template, accountName, app);
 	}
@@ -80,7 +81,7 @@ public class FakePlayer extends Player
 	
 	public void assignDefaultAI() {
 		try {
-			setFakeAi(FakePlayerManager.INSTANCE.getAIbyClassId(getClassId()).getConstructor(FakePlayer.class).newInstance(this));
+			setFakeAi(FakeHelpers.getAIbyClassId(getClassId()).getConstructor(FakePlayer.class).newInstance(this));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

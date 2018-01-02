@@ -3,9 +3,10 @@ package com.elfocrash.roboto.ai;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import com.elfocrash.roboto.FakePlayer;
-import com.elfocrash.roboto.FakePlayerManager;
 import com.elfocrash.roboto.ai.addon.IConsumableSpender;
+import com.elfocrash.roboto.helpers.FakeHelpers;
 import com.elfocrash.roboto.model.HealingSpell;
 import com.elfocrash.roboto.model.OffensiveSpell;
 import com.elfocrash.roboto.model.SpellUsageCondition;
@@ -26,7 +27,7 @@ public class DuelistAI extends CombatAI implements IConsumableSpender {
 		applyDefaultBuffs();
 		handleShots();
 		selfSupportBuffs();
-		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());		
+		tryTargetRandomCreatureByTypeInRadius(FakeHelpers.getTestTargetClass(), FakeHelpers.getTestTargetRange());		
 		tryAttackingUsingFighterOffensiveSkill();
 		setBusyThinking(false);
 	}
@@ -64,7 +65,7 @@ public class DuelistAI extends CombatAI implements IConsumableSpender {
 	@Override
 	protected int[][] getBuffs()
 	{
-		return FakePlayerManager.INSTANCE.getFighterBuffs();
+		return FakeHelpers.getFighterBuffs();
 	}
 	
 	@Override

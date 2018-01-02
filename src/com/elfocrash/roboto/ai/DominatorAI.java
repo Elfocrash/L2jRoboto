@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.elfocrash.roboto.FakePlayer;
-import com.elfocrash.roboto.FakePlayerManager;
+import com.elfocrash.roboto.helpers.FakeHelpers;
 import com.elfocrash.roboto.model.HealingSpell;
 import com.elfocrash.roboto.model.OffensiveSpell;
 import com.elfocrash.roboto.model.SupportSpell;
@@ -29,7 +29,7 @@ public class DominatorAI extends CombatAI
 		setBusyThinking(true);
 		applyDefaultBuffs();		
 		handleShots();		
-		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());		
+		tryTargetRandomCreatureByTypeInRadius(FakeHelpers.getTestTargetClass(), FakeHelpers.getTestTargetRange());		
 		tryAttackingUsingMageOffensiveSkill();
 		setBusyThinking(false);
 	}
@@ -51,7 +51,7 @@ public class DominatorAI extends CombatAI
 	@Override
 	protected int[][] getBuffs()
 	{
-		return FakePlayerManager.INSTANCE.getMageBuffs();
+		return FakeHelpers.getMageBuffs();
 	}
 
 	@Override

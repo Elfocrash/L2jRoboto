@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 import com.elfocrash.roboto.FakePlayer;
-import com.elfocrash.roboto.FakePlayerManager;
 import com.elfocrash.roboto.ai.addon.IHealer;
+import com.elfocrash.roboto.helpers.FakeHelpers;
 import com.elfocrash.roboto.model.HealingSpell;
 import com.elfocrash.roboto.model.OffensiveSpell;
 import com.elfocrash.roboto.model.SupportSpell;
@@ -32,7 +32,7 @@ public class CardinalAI extends CombatAI implements IHealer
 		setBusyThinking(true);
 		applyDefaultBuffs();
 		handleShots();		
-		tryTargetingLowestHpTargetInRadius(_fakePlayer, FakePlayer.class, FakePlayerManager.INSTANCE.getTestTargetRange());
+		tryTargetingLowestHpTargetInRadius(_fakePlayer, FakePlayer.class, FakeHelpers.getTestTargetRange());
 		tryHealingTarget(_fakePlayer);
 		setBusyThinking(false);
 	}
@@ -61,7 +61,7 @@ public class CardinalAI extends CombatAI implements IHealer
 	@Override
 	protected int[][] getBuffs()
 	{
-		return FakePlayerManager.INSTANCE.getMageBuffs();
+		return FakeHelpers.getMageBuffs();
 	}	
 
 	@Override

@@ -1,7 +1,7 @@
 package com.elfocrash.roboto.ai;
 
 import com.elfocrash.roboto.FakePlayer;
-import com.elfocrash.roboto.FakePlayerManager;
+import com.elfocrash.roboto.helpers.FakeHelpers;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.commons.random.Rnd;
@@ -73,7 +73,7 @@ public class EnchanterAI extends FakePlayerAI {
 	
 	private ItemInstance checkIfWeaponIsExistsEquipped(ItemInstance weapon) {
 		if(weapon == null) {
-			FakePlayerManager.INSTANCE.giveWeaponsByClass(_fakePlayer, false);
+			FakeHelpers.giveWeaponsByClass(_fakePlayer, false);
 			weapon = _fakePlayer.getActiveWeaponInstance();
 		}
 		return weapon;

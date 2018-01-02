@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.elfocrash.roboto.FakePlayer;
-import com.elfocrash.roboto.FakePlayerManager;
+import com.elfocrash.roboto.helpers.FakeHelpers;
 import com.elfocrash.roboto.model.HealingSpell;
 import com.elfocrash.roboto.model.OffensiveSpell;
 import com.elfocrash.roboto.model.SupportSpell;
@@ -30,7 +30,7 @@ public class WindRiderAI extends CombatAI
 		setBusyThinking(true);
 		applyDefaultBuffs();
 		handleShots();			
-		tryTargetRandomCreatureByTypeInRadius(FakePlayerManager.INSTANCE.getTestTargetClass(), FakePlayerManager.INSTANCE.getTestTargetRange());		
+		tryTargetRandomCreatureByTypeInRadius(FakeHelpers.getTestTargetClass(), FakeHelpers.getTestTargetRange());		
 		tryAttackingUsingFighterOffensiveSkill();
 		setBusyThinking(false);
 	}
@@ -58,7 +58,7 @@ public class WindRiderAI extends CombatAI
 	@Override
 	protected int[][] getBuffs()
 	{
-		return FakePlayerManager.INSTANCE.getFighterBuffs();
+		return FakeHelpers.getFighterBuffs();
 	}	
 	
 	@Override
