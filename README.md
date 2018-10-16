@@ -30,3 +30,16 @@ L2jRoboto has minimal dependencies
 You can find the patch under the `dist` folder
 
 Have fun
+
+## Creations
+https://www.youtube.com/watch?v=RuVnr0nZVl8
+
+https://www.youtube.com/watch?v=X9wEoF7ILmw
+
+https://www.youtube.com/watch?v=e3jBNtkE4yA
+
+https://www.youtube.com/watch?v=Dob4yRtVr0s
+
+https://www.youtube.com/watch?v=ynMtvmLHV5U
+
+https://www.youtube.com/watch?v=7Q14_wgzqS8
